@@ -1,12 +1,10 @@
 ########################################################################################################################
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
 ##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
 ##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
-##                                                                                                                    ##
 ##                                                                                                                    ##
 ########################################################################################################################
 
@@ -31,6 +29,10 @@ def comparar_imagenes(ruta1, ruta2, umbral=0.9) -> bool:
     def generar_hash(ruta):
         """Calcula el hash MD5 de la imagen en el camino especificado."""
         with Image.open(ruta) as image:
+        """
+        La función hashlib.md5() crea un objeto hash MD5, y image.tobytes() convierte la imagen en una
+        secuencia de bytes. Luego, hexdigest() se utiliza para obtener la representación hexadecimal del hash.
+        """
             hash_value = hashlib.md5(image.tobytes()).hexdigest()
         return hash_value
 
