@@ -10,7 +10,7 @@
 
 from typing import Tuple, List
 
-def contabilizar_repeticiones(lista: List[bool], lng_t: int, lng_f: int) -> Tuple[List[int], List[int]]:
+def contar_resultados(lista: List[bool], lng_t: int, lng_f: int) -> Tuple[List[int], List[int]]:
 
     """
     La función contabiliza los valores "True" y "False" dentro de una lista.
@@ -29,7 +29,7 @@ def contabilizar_repeticiones(lista: List[bool], lng_t: int, lng_f: int) -> Tupl
         EJEMPLO:
 
         lista_txf = [True, False, True, True, False, False, True, True, True, True, True, True]
-        contabilizar_repeticiones(lista_txf, 5, 5)
+        contar_resultados(lista_txf, 5, 5)
 
         Resultado → lista_true = [1, 1, 0, 0, 1] , lista_false = [1, 1, 0, 0, 1]
     
@@ -53,24 +53,26 @@ def contabilizar_repeticiones(lista: List[bool], lng_t: int, lng_f: int) -> Tupl
         indice_true, indice_false = -1, -1
 
         # Se verifica que la lista contenga al menos 1 valor y que ese valor sea "True".
-        while lista and lista[0] is True:
-            lista = lista[1:]
-            indice_true += 1
-
-        if indice_true < lng_t:
-            lista_trues[indice_true] += 1
-        else:
-            lista_trues[-1] += 1
+        if lista and lista[0] is True:
+            while lista and lista[0] is True:
+                lista = lista[1:]
+                indice_true += 1
+                     
+            if indice_true < lng_t:
+                lista_trues[indice_true] += 1
+            else:
+                lista_trues[-1] += 1
 
         # Se verifica que la lista contenga al menos 1 valor y que ese valor sea "False".
-        while lista and lista[0] is False:
-            lista = lista[1:]
-            indice_false += 1
+        if lista and lista[0] is False:
+            while lista and lista[0] is False:
+                lista = lista[1:]
+                indice_false += 1
 
-        if indice_false < lng_f:
-            lista_falses[indice_false] += 1
-        else:
-            lista_falses[-1] += 1
+            if indice_false < lng_f:
+                lista_falses[indice_false] += 1
+            else:
+                lista_falses[-1] += 1
 
     print(f"Lista Trues → {lista_trues}")
     print(f"Lista Falses → {lista_falses}")
