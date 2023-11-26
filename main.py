@@ -16,6 +16,7 @@ from typing import List, Tuple
 from contabilizar_repeticiones import contar_resultados
 from probabilidades_por_ronda import lista_probabilidad
 from resultados_random import generar_resultado
+from probabilidades_por_ronda import lista_probabilidad
 
 RONDA = 0
 global lst_var_true, lst_var_false
@@ -137,32 +138,64 @@ long_pba = len(PROBABILIDAD_BASE_ACIERTOS)
 PROBABILIDAD_BASE_FALLOS = list_fallos
 long_pbf = len(PROBABILIDAD_BASE_FALLOS)
 
-
+print(list_aciertos)
+print(list_fallos)
 """··················································································································"""
 imprimir_datos_definidos()
 """··················································································································"""
 
 def realizar_calculos(resultado):
-    contar_rondas()  # RONDA
+    # rondas = contar_rondas()  # RONDA
     listas_variables_base_100(resultado)  # lst_var_true, lst_var_false
-    generar_lista(resultado)  # lista_resultados
+    lista_ttl = generar_lista(resultado)  # lista_resultados
 
-    contar_resultados(lista_resultados, long_pba, long_pbf)  # lista_aciertos, lista_fallos
-
+    lst_aciertos, lst_fallos \
+        = contar_resultados(lista_resultados, long_pba, long_pbf)  # lista_aciertos, lista_fallos
+    """··············································································································"""
+    # Datos:
+    print(f"Aciertos repetidos → {lst_aciertos}")  # [462, 355, 256, 188, 136, 102, 93, 52, ..., 0, 0, 1]
+    print(f"Fallos repetidos → {lst_fallos}")  # [1404, 344, 80, 13, 4, 3, 0]
+    """··············································································································"""
+    print(f"Resultados: {lista_ttl}")
+    print("--------------------------------------------------------------------------")
+    # probabilidades(lst_aciertos, lst_fallos)
     pass
 
-repetir = 10000
+"""··················································································································
+# PRUEBAS
+repetir = 10
 while repetir > 0:
     repetir -= 1
+    rondas = contar_rondas()
     opcion = generar_resultado(OPCIONES_ACIERTOS, OPCIONES_FALLOS)
+    print(f"RONDA: {rondas} → {opcion}")
     realizar_calculos(opcion)
+··················································································································"""
+
+def introducir_resultado() -> bool:
+    while True:
+        intro_opcion = input("True → [1] / False → [0]: ")
+        if intro_opcion == "1":
+            return True
+        elif intro_opcion == "0":
+            return False
+        else:
+            print("El dato introducido no es correcto")
+
+# Introducción de resultados (manual)
+while True:
+    rondas = contar_rondas()
+    opcion = introducir_resultado()
+    print(f"RONDA: {rondas} → {opcion}")
+    realizar_calculos(opcion)
+
 
 
 # ================================================= [ CONSTRUCCIÓN ] ================================================= #
 
 # Estructuración -------------------------------------------------------------------------------------------------------
 
-"""
+    """
 1º GENERAR LAS VARIABLES FIJAS:
 
    - Saldo inicial                       ::: Define un saldo inicial

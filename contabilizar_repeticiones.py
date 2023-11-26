@@ -74,7 +74,4 @@ def contar_resultados(lista: List[bool], lng_t: int, lng_f: int) -> Tuple[List[i
             else:
                 lista_falses[-1] += 1
 
-    print(f"Lista Trues → {lista_trues}")
-    print(f"Lista Falses → {lista_falses}")
-
     return lista_trues, lista_falses
