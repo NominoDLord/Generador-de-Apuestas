@@ -15,6 +15,7 @@
 from typing import List, Tuple
 from contabilizar_repeticiones import contar_resultados
 from probabilidades_por_ronda import lista_probabilidad
+from resultados_random import generar_resultado
 
 RONDA = 0
 global lst_var_true, lst_var_false
@@ -150,9 +151,12 @@ def realizar_calculos(resultado):
 
     pass
 
-realizar_calculos(True)
-realizar_calculos(True)
-realizar_calculos(False)
+repetir = 10000
+while repetir > 0:
+    repetir -= 1
+    opcion = generar_resultado(OPCIONES_ACIERTOS, OPCIONES_FALLOS)
+    realizar_calculos(opcion)
+
 
 # ================================================= [ CONSTRUCCIÓN ] ================================================= #
 
