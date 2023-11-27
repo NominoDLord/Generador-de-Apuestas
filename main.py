@@ -8,315 +8,185 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-# GENERADOR DE APUESTAS
+# ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
 
-# ======================================= [ BIBLIOTECAS, MÓDULOS y VARIABLES ] ======================================= #
+from random import choice as elegir
+from typing import List
 
-from typing import List, Tuple
-from contabilizar_repeticiones import contar_resultados
-from probabilidades_por_ronda import lista_probabilidad
-from resultados_random import generar_resultado
-from probabilidades_por_ronda import lista_probabilidad
+# ================================================== [ VARIABLES ] =================================================== #
 
-RONDA = 0
-global lst_var_true, lst_var_false
+global saldo_final
+global saldo
 global lista_resultados
 
-# ==================================================== [ CLASES ] ==================================================== #
+INDEX = 0
+RONDA = 0
+V_MIN = 0.30
+V_MAX = 99.00
+LIMITE_RIESGO = 0.005
+SALDO_INICIAL = 300
+OPCIONES_ACIERTOS = 3
+OPCIONES_FALLOS = 1
+OPCIONES_TOTALES = OPCIONES_ACIERTOS + OPCIONES_FALLOS
+MULTIPLICADOR = OPCIONES_FALLOS / OPCIONES_ACIERTOS
+PROBABILIDAD = (OPCIONES_ACIERTOS / OPCIONES_TOTALES) * 100
 
-class VariablesFijas:
+# ================================================ CLASES & FUNCIONES ================================================ #
 
-    def __init__(self, saldo_inicial=300, apuesta_min=0.3, apuesta_max=100, op_positivas=3, op_negativas=1,
-                 multi_pos=1.32, multi_neg=0, riesgo_lim_pos=0.03, riesgo_lim_neg=0.01) -> None:
-        """Variables de inicialización necesarias para realizar los cálculos"""
-
-        self.saldo_inicial = saldo_inicial
-        self.apuesta_min = apuesta_min
-        self.apuesta_max = apuesta_max
-        self.op_positivas = op_positivas
-        self.op_negativas = op_negativas
-        self.multi_pos = multi_pos
-        self.multi_neg = multi_neg
-        self.riesgo_lim_pos = riesgo_lim_pos
-        self.riesgo_lim_neg = riesgo_lim_neg
-
-        self.total_num_opciones = op_positivas + op_negativas
-        self.porcentaje_base_pos = (op_positivas / self.total_num_opciones) * 100
-        self.porcentaje_base_neg = (op_negativas / self.total_num_opciones) * 100
-
-# =================================================== [ FUNCIONES ] ================================================== #
-def contar_rondas():
+def contar_rondas() -> int:
     global RONDA
     RONDA += 1
     return RONDA
 
-def listas_variables_base_100(resultado) -> tuple[list[bool], list[bool]]:
-    """
-    Se crean dos listas bases para los valores True y False respecto a su diferencia porcentual.
-    Se usa la función round para redondear a un número entero para poder crear las listas.
-    Estas listas se usarán como referencia inicial ya que la lista de generación de resultados inicial estará vacía.
-    A medida que se vayan introduciendo los resultados a la lista general, estas listas se irán vaciando.
-    """
-    global lst_var_true, lst_var_false
-    # Definir la lista inicial base -------------------------------------------------------------------------------
-    if not hasattr(listas_variables_base_100, "definir_base"):
-        """Este bloque impedirá que la lista se regenere para así poder ir actualizando los datos"""
-        lst_var_true = round(PORCENTAJE_BASE_POS) * [True]
-        lst_var_false = round(PORCENTAJE_BASE_NEG) * [False]
-    listas_variables_base_100.definir_base = True
-    # -------------------------------------------------------------------------------------------------------------
-    if len(lst_var_true) > 0 and resultado == True:
-        lst_var_true.pop()
+def generar_indice(opcion) -> int:
+    global INDEX
+    INDEX = INDEX + 1 if opcion is False else 0
+    return INDEX
 
-    elif len(lst_var_false) > 0 and resultado == False:
-        lst_var_false.pop()
+def generar_listas_100() -> tuple[list[bool], list[bool]]:
+    trues = [True] * int(OPCIONES_ACIERTOS / OPCIONES_TOTALES)
+    falses = [False] * int(OPCIONES_FALLOS / OPCIONES_TOTALES)
+    return trues, falses
 
-    return lst_var_true, lst_var_false
-
-def generar_lista(resultado):
+def generar_lista(resultado) -> List[bool]:
     global lista_resultados
-    # Crear lista inicial -----------------------------------------------------------------------------------------
+    # Crear lista -------------------------------------------------------------------------------------------------
     if not hasattr(generar_lista, "lista_creada"):
-        """Este bloque impedirá que la lista se regenere para así poder ir actualizando los datos"""
+        # Este bloque impedirá que la lista se vacie al volver a llamar a la función.
         lista_resultados = []
     generar_lista.lista_creada = True
     # -------------------------------------------------------------------------------------------------------------
-    lista_resultados.insert(0, resultado)
+    lista_resultados.append(resultado)
     return lista_resultados
 
-def imprimir_datos_definidos():
-    print(f"Saldo inicial: {SALDO_INICIAL}")
-    print(f"Apuesta mínima: {APUESTA_MIN}")
-    print(f"Apuesta máxima: {APUESTA_MAX}")
-    print(f"Número de aciertos: {OPCIONES_ACIERTOS}")
-    print(f"Número de fallos: {OPCIONES_FALLOS}")
-    print(f"Número de opciones: {CANTIDAD_OPCIONES}")
-    print(f"Porcentaje base positivo: {PORCENTAJE_BASE_POS}")
-    print(f"Porcentaje base negativo: {PORCENTAJE_BASE_NEG}")
-    print(f"Multiplicador positivo: {MULTI_POSITIVO}")
-    print(f"Multiplicador negativo: {MULTI_NEGATIVO}")
-    print(f"Riesgo límite positivo: {RIESGO_LIM_POSITIVO}")
-    print(f"Riesgo límite negativo: {RIESGO_LIM_NEGATIVO}")
+def actualizar_saldo(apuesta: float, resultado: bool) -> float:
+    """
+    @param apuesta: Cantidad apostada.
+    @param resultado:
+        True → Acertar
+        False → Fallar
+    @return: Saldo final.
+    """
+    global saldo_final
+    # Crear lista inicial -----------------------------------------------------------------------------------------
+    if not hasattr(actualizar_saldo, "guardar_saldo_inicial"):
+        # Este bloque impedirá que el saldo se regenere al volver a llamar a la función.
+        saldo_final = SALDO_INICIAL
+    actualizar_saldo.guardar_saldo_inicial = True
+    # -------------------------------------------------------------------------------------------------------------
+
+    beneficio = apuesta * MULTIPLICADOR
+
+    if resultado is False:
+        saldo_final -= apuesta
+        return saldo_final
+
+    elif resultado is True:
+        saldo_final += beneficio
+        return saldo_final
+
+
+def calcular_apuesta(lista, resultado):
+
+    def contar_valores(listas):
+        true_count, false_count = 0, 0
+
+        for elemento in listas:
+            true_count += elemento.count(True)
+            false_count += elemento.count(False)
+        return true_count, false_count
+
+    if resultado is True and len(lista_variable_trues) > 0:
+        lista_variable_trues.pop()
+
+    if resultado is False and len(lista_variable_falses) > 0:
+        lista_variable_falses.pop()
+
+    listas_trues_falses = [lista, lista_variable_trues, lista_variable_falses]
+    total_trues, total_falses = contar_valores(listas_trues_falses)
+
+    proporcion_trues = total_trues * OPCIONES_FALLOS
+    proporcion_falses = total_falses * OPCIONES_ACIERTOS
+
+    if proporcion_trues > proporcion_falses:
+        apostar = OPCIONES_ACIERTOS
+        return apostar
+
+    if proporcion_trues < proporcion_falses:
+        apostar = OPCIONES_FALLOS
+        return apostar
+
+    if proporcion_trues == proporcion_falses:
+        apostar = OPCIONES_TOTALES / 2
+        return apostar
+
     pass
+
+# ==================================================== [ PRUEBAS ] =================================================== #
+
+def generar_probabilidades() -> List[float]:
+    lista = []
+    lista_probabilidades = []
+
+    probabilidad_fallar = (OPCIONES_FALLOS / OPCIONES_TOTALES) * 100
+
+    while LIMITE_RIESGO < probabilidad_fallar:
+        lista_probabilidades.append(round(probabilidad_fallar, 3))
+        probabilidad_fallar *= (OPCIONES_FALLOS / OPCIONES_TOTALES)
+
+    for elemento in lista_probabilidades:
+        resultado = 100 - elemento
+        lista.append(resultado)
+
+    return lista
+
+probabilidad_ronda = generar_probabilidades()
+
+def generar_resultado(trues: int, falses: int) -> bool:
+    # Función para la generación de pruebas.
+    """
+    Simulación de un resultado random en base a las probabilidades de acertar y fallar.
+    @param trues: Indica el número de opciones posibles de acertar.
+    @param falses: Indica el número de opciones posibles de fallar.
+    @return:
+        True → Acertar
+        False → Fallar
+    """
+    lista_trues = [True] * trues
+    lista_falses = [False] * falses
+    lista_opciones = lista_trues + lista_falses
+    resultado = elegir(lista_opciones)
+    return resultado
 
 # =================================================== [ EJECUCIÓN ] ================================================== #
 
-# Se definen las variables fijas.
-""" ··········································································································· TODO ···
-# _sld = float(input("Introducir cantidad de saldo inicial: "))
-# _min = float(input("Introducir cantidad de apuesta mínima: "))
-# _max = float(input("Introducir cantidad de apuesta máxima: "))
-# _opp = float(input("Introducir cantidad de opciones positivas: "))
-# _opn = float(input("Introducir cantidad de opciones negativas: "))
-# _mps = float(input("Introducir multiplcador positivo: "))
-# _mpn = float(input("Introducir multiplcador negativo: "))
-# _rlp = float(input("Introducir el riesgo límite positivo: "))
-# _rln = float(input("Introducir el riesgo límite negativo: "))
+lista_variable_trues, lista_variable_falses = generar_listas_100()
 
-# instancia_var = VariablesFijas(_sld, _min, _max, _opp, _opn, _mps, _mpn, _rlp, _rln)
-···················································································································· """
-# Se crea la instancia para las variables fijas.
-variables_fijas = VariablesFijas()
-
-SALDO_INICIAL = variables_fijas.saldo_inicial
-APUESTA_MIN = variables_fijas.apuesta_min
-APUESTA_MAX = variables_fijas.apuesta_max
-OPCIONES_ACIERTOS = variables_fijas.op_positivas
-OPCIONES_FALLOS = variables_fijas.op_negativas
-MULTI_POSITIVO = variables_fijas.multi_pos
-MULTI_NEGATIVO = variables_fijas.multi_neg
-RIESGO_LIM_POSITIVO = variables_fijas.riesgo_lim_pos
-RIESGO_LIM_NEGATIVO = variables_fijas.riesgo_lim_neg
-
-CANTIDAD_OPCIONES = variables_fijas.total_num_opciones
-PORCENTAJE_BASE_POS = variables_fijas.porcentaje_base_pos
-PORCENTAJE_BASE_NEG = variables_fijas.porcentaje_base_neg
-
-list_aciertos, list_fallos = lista_probabilidad(OPCIONES_ACIERTOS, OPCIONES_FALLOS)  # lista_aciertos, lista_fallos
-PROBABILIDAD_BASE_ACIERTOS = list_aciertos
-long_pba = len(PROBABILIDAD_BASE_ACIERTOS)
-PROBABILIDAD_BASE_FALLOS = list_fallos
-long_pbf = len(PROBABILIDAD_BASE_FALLOS)
-
-print(list_aciertos)
-print(list_fallos)
-"""··················································································································"""
-imprimir_datos_definidos()
-"""··················································································································"""
-
-def realizar_calculos(resultado):
-    # rondas = contar_rondas()  # RONDA
-    listas_variables_base_100(resultado)  # lst_var_true, lst_var_false
-    lista_ttl = generar_lista(resultado)  # lista_resultados
-
-    lst_aciertos, lst_fallos \
-        = contar_resultados(lista_resultados, long_pba, long_pbf)  # lista_aciertos, lista_fallos
-    """··············································································································"""
-    # Datos:
-    print(f"Aciertos repetidos → {lst_aciertos}")  # [462, 355, 256, 188, 136, 102, 93, 52, ..., 0, 0, 1]
-    print(f"Fallos repetidos → {lst_fallos}")  # [1404, 344, 80, 13, 4, 3, 0]
-    """··············································································································"""
-    print(f"Resultados: {lista_ttl}")
-    print("--------------------------------------------------------------------------")
-    # probabilidades(lst_aciertos, lst_fallos)
-    pass
-
-"""··················································································································
-# PRUEBAS
-repetir = 10
-while repetir > 0:
-    repetir -= 1
-    rondas = contar_rondas()
-    opcion = generar_resultado(OPCIONES_ACIERTOS, OPCIONES_FALLOS)
-    print(f"RONDA: {rondas} → {opcion}")
-    realizar_calculos(opcion)
-··················································································································"""
-
-def introducir_resultado() -> bool:
-    while True:
-        intro_opcion = input("True → [1] / False → [0]: ")
-        if intro_opcion == "1":
-            return True
-        elif intro_opcion == "0":
-            return False
-        else:
-            print("El dato introducido no es correcto")
-
-# Introducción de resultados (manual)
+repetir = 1000  # TODO: PRUEBAS
 while True:
+
+    # repetir -= 1
     rondas = contar_rondas()
-    opcion = introducir_resultado()
-    print(f"RONDA: {rondas} → {opcion}")
-    realizar_calculos(opcion)
+    # resultado_ronda = input("INSERTAR EL RESULTADO EN RONDA: ")
+    resultado_ronda = generar_resultado(OPCIONES_ACIERTOS, OPCIONES_FALLOS)  # TODO: PRUEBAS
 
+    lista_definida = generar_lista(resultado_ronda)
 
+    # indice = generar_indice(resultado_ronda)
 
-# ================================================= [ CONSTRUCCIÓN ] ================================================= #
+    cantidad_apostada = calcular_apuesta(lista_definida, resultado_ronda)  # resultado_ronda (Segundo arg en Prueba 1)
+    saldo = actualizar_saldo(cantidad_apostada, resultado_ronda)
 
-# Estructuración -------------------------------------------------------------------------------------------------------
+    print(f"RONDA: {rondas}")
+    print(f"APUESTA → {cantidad_apostada}")
+    print(f"RESULTADO → {resultado_ronda}")
+    print(f"SALDO → {saldo}")
+    print("--------------------------")
 
-    """
-1º GENERAR LAS VARIABLES FIJAS:
+    if saldo < 1:
+        break
 
-   - Saldo inicial                       ::: Define un saldo inicial
-   
-   - Cantidad de opciones (T)            ::: Define la cantidad de posibles opciones a acertar
-   - Cantidad de opciones (F)            ::: Define la cantidad de posibles opciones a fallar
-   
-   - Apuesta (Mínima)                    ::: Define la apuesta mínima del juego
-   - Apuesta (Máxima)                    ::: Define la apuesta máxima del juego
-   
-   - Multiplicador (True)                ::: Múltiplica el valor de la apuesta en caso de acertar
-   - Multiplicador (False)               ::: Múltiplica el valor de la apuesta en caso de fallar
-   
-   - Riesgo límite (Aciertos)            ::: Limita el número de repeticiones en caso de acertar
-   - Riesgo límite (Fallos)              ::: Limita el número de repeticiones en caso de fallar
-   
-2º CALCULAR VALORES INICIALES:
+    if (saldo - SALDO_INICIAL) > 10000:
+        break
 
-   - Generar lista apuestas              ::: Define el valor de las apuestas
-   - Opciones totales                    ::: Se suman las opciones de acertar y fallar
-   
-   - Probabilidad Base (T)               ::: Se calcula la probabilidad de acertar (ronda individual)
-   - Probabilidad Base (F)               ::: Se calcula la probabilidad de fallar (ronda individual)
-   
-   - Probabilidad repetición (T)         ::: Se calcula probabilidad de acertar (ronda repetida)
-   - Probabilidad repetición (F)         ::: Se calcula probabilidad de fallar (ronda repetida)
-   
-   - Lista (T)                           ::: Se contabilizan las opciones a acertar × 100
-   - Lista (F)                           ::: Se contabilizan las opciones a fallar × 100
-
-3º DEFINIR LA ENTRADA DE DATOS
-
-   - Agregar datos a lista (ttl)         ::: Se agregan los datos a la lista Datos_Totales
-   - Agregar datos a lista (100)         ::: Se agregan los datos a la lista Datos_x100
-   
-   - Eliminar datos de listas            ::: Se suprime dato según valor en lista aciertos o fallos
-    
-4º CONTABILIZAR DATOS RECIBIDOS
-
-   - Contabilizar repeticiones (T-ttl)   ::: Recuento repeticiones acertadas (rondas totales)
-   - Contabilizar repeticiones (F-ttl)   ::: Recuento repeticiones falladas (rondas totales)
-   - Contabilizar repeticiones (T-100)   ::: Recuento repeticiones acertadas (rondas × 100)
-   - Contabilizar repeticiones (F-100)   ::: Recuento repeticiones falladas (rondas × 100)
-   
-   - Contabilizar resultados (T-ttl)     ::: Recuento aciertos (rondas totales)
-   - Contabilizar resultados (F-ttl)     ::: Recuento fallos (rondas totales)
-   - Contabilizar resultados (T-100)     ::: Recuento aciertos (rondas × 100)
-   - Contabilizar resultados (F-100)     ::: Recuento fallos (rondas × 100)
-
-5º PROPORCIÓN DATOS CONTABILIZADOS
-
-   - Proporción repeticiones (T-ttl)     ::: Proporción entre repeticiones acertadas (rondas totales) 
-   - Proporción repeticiones (F-ttl)     ::: Proporción entre repeticiones falladas (rondas totales)
-   - Proporción repeticiones (T-100)     ::: Proporción entre repeticiones acertadas (rondas × 100)
-   - Proporción repeticiones (F-100)     ::: Proporción entre repeticiones falladas (rondas × 100)
-
-   - Proporción resultados (T-ttl)       ::: Se calcula la proporción de aciertos (rondas totales)
-   - Proporción resultados (F-ttl)       ::: Se calcula la proporción de fallos (rondas totales)
-   - Proporción resultados (T-100)       ::: Se calcula la proporción de aciertos (rondas × 100)
-   - Proporción resultados (F-100)       ::: Se calcula la proporción de fallos (rondas × 100)
-
-6º COMPARAR DATOS
-
-   - Repeticiones (T-ttl)                ::: Diferencia proporción repetición y lista de probabilidad
-   - Repeticiones (F-ttl)                ::: Diferencia proporción repetición y lista de probabilidad
-   - Repeticiones (T-100)                ::: Diferencia proporción repetición y lista de probabilidad
-   - Repeticiones (F-100)                ::: Diferencia proporción repetición y lista de probabilidad
-
-   - Probabilidad (T-ttl)                ::: Diferencia proporción resultados y probabilidad Base
-   - Probabilidad (F-ttl)                ::: Diferencia proporción resultados y probabilidad Base
-   - Probabilidad (T-100)                ::: Diferencia proporción resultados y probabilidad Base
-   - Probabilidad (F-100)                ::: Diferencia proporción resultados y probabilidad Base
-
-7º DEFINR VALOR DE LA APUESTA
-
-   - Recoger los datos comparados
-   - Establecer el valor de la apuesta
-
-"""
-
-# Check List -----------------------------------------------------------------------------------------------------------
-
-# X → Completado || R → Revisar || P → En proceso
-
-# TODO [ ] > Imports    →  Tkinter (Interfaz gráfica)
-
-# TODO [X] > Classes    →  VARIABLES FIJAS (Introducción de los valores)
-#                       →  [Saldo inicial]
-#                       →  [Apuesta mínima, Apuesta máxima]
-#                       →  [Opciones opsitivas, Opciones negativas]
-#                       →  [Multiplicador positivo, Multiplicador negativo]
-#                       →  [Riesgo límite positivo, Riesgo límite negativo]
-
-# TODO [ ] > Función    →  VALORES BASE (Calcular a partir de variables fijas)
-#                       →  [(True/Total)×100, (False/Total)×100]
-#                       →  [True % Repeticiones, False % Repeticiones]
-#                       →  [Calcular Ronda de apuestas]
-
-# TODO [ ] > Función    →  generar_lista
-# TODO [ ] > Módulos    →
-# TODO [ ] > Módulos    →
-# TODO [ ] > Módulos    →
-# TODO [ ] > Módulos    →  Comparativa [Valores Base × Resutados]
-
-# TODO [ ] > Módulos    →  Contabilizar Repeticiones
-
-# TODO [ ] > Módulos    →  Capturar pantalla
-
-
-
-# TODO [ ] > Módulos    →  Pruebas
-
-#                       →  [Lista de opciones]
-#                       →  [Generar random]
-#
-
-# Work Flow ------------------------------------------------------------------------------------------------------------
-# TODO
-#   ----------------------------------
-#   Step 1 → Intr : valores fijos
-#   Step 2 → Calc : valores fijos
-#   Step 3 → Calc : valores variables
-#   Step 4 → Intr : resultados por ronda
-#   Step 5 → calc :
+print(f"Beneficios → {saldo - SALDO_INICIAL}")
