@@ -9,9 +9,25 @@
 ########################################################################################################################
 
 """
+    El creador de este código no se hace responsable del uso indebido que la persona pueda hacer con él.
+
+    Este programa es para uso personal y está TOTALMENTE PROHIBIDO el uso de este código para obtener beneficios a
+    costa de vendérselo a otras personas.
+
     IMPORTANTE [LEER ANTES DE MANIPULAR EL CÓDIGO]
 
-    Antes de ejecutar el programa se deben ajustar los siguientes parámetros (muy cuidadosamente):
+    Su código estará ÚNICAMENTE alojado en la cuenta de su desarrollador:
+
+        · https://github.com/NominoDLord/Generador-de-Apuestas
+
+    Este programa está diseñado en base a una determinada plataforma de apuestas (no voy a decir cuál porque no es
+    mi intención promocionar ninguna plataforma en concreto) y a una determinada resolución de pantalla, por lo que,
+    se deberan ajustar algunas variables para poder ejecutar correctamente el código.
+
+    Antes de empezar a ejecutar el código, es importante entender primero cómo funcina y realizar una serie de pruebas
+    antes de implementarlo en alguna plataforma real.
+
+    Los principales parámetros que se deben ajustar son los siguientes:
 
         - Argumentos para el módulo de capturar_pantalla:
 
@@ -56,6 +72,13 @@
                     EJEMPLO: Si las opciones de aciertos y fallos son de 16 y 17 (como es el caso del juego
                              de la ruleta), el número divisor debería ser un 3 o 4.
                              (realizar simuladiones para probar antes los resultados).
+
+                    NOTAS: Para opciones inferiores a 5, podemos aumentar las apuestas multiplicando (en la función
+                           'calcular_apuesta') el 'Numero'. Esto hará que los beneficios sean mucho más altos en
+                           un menor número de rondas, pero también aumentará el riesgo de perdidas (sobretodo si se
+                           inicia con un saldo bajo). Por lo que, es importante realizar pruebas antes de empezar a
+                           ejecutar la estratégia.
+
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
