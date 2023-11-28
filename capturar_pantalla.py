@@ -19,6 +19,8 @@ def captura(nombre, ruta, pos_x=0, pos_y=0, ancho=1920, alto=1080):
 
         NOTA: La posición [x|y] = [0|0] corresponde al punto superior-izquierdo de la pantalla.
               Los valores [ancho|alto] corresponden a la distancia en píxeles sobre el punto [x|y].
+        
+        IMPORTANTE: Cada vez que se realice una captura, la primera será reemplazada por la segunda.
 
     @param nombre: Nombre de la imagen a capturar.
     @param ruta: Dirección dónde se guardará la imagen capturada.
