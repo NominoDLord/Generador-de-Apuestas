@@ -13,8 +13,9 @@ REPOSITORIO:
 	¡ ¡ ¡ IMPORTANTE ! ! !
 
 Este programa es para uso personal y está TOTALMENTE PROHIBIDA su distrubución con fines lucrativos.
-El creador de este código no se hace responsable del uso indebido que la persona pueda hacer con él.
 
+SU AUTOR NO OBTIENE NINGÚN TIPO DE BENEFICIO AL PROPORCIONAR ESTE CÓDIGO POR LO QUE NO SE HACE RESPONSABLE DE LAS
+POSIBLES PERDIDAS QUE EL PROGRAMA PUEDAN GENERAR O DE SI SE HACE UN MAL USO DEL MISMO.
 ----------------------------------------------------------------
 
 · INFORMACIÓN SOBRE EL PROGRAMA
@@ -36,8 +37,7 @@ Los valores deben ajustarse dependiendo de la plataforma que se utilice, el tipo
 
 Dentro del archivo 'main.py' se especifica más detalladamente a qué hacen referencia cada variable en cuestión.
 
-SU AUTOR NO OBTIENE NINGÚN TIPO DE BENEFICIO AL PROPORCIONAR ESTE CÓDIGO POR LO QUE NO SE HACE RESPONSABLE DE LAS
-POSIBLES PERDIDAS QUE EL PROGRAMA PUEDAN GENERAR O DE SI SE HACE UN MAL USO DEL MISMO.
 
 ----------------------------------------------------------------
+AUTOR:
 	Nômino D Lord
