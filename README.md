@@ -35,7 +35,8 @@ de la siguiente apuesta y lo ejecutará.
 
 Los valores deben ajustarse dependiendo de la plataforma que se utilice, el tipo de juego y el tamaño de pantalla.
 
-Dentro del archivo 'main.py' se especifica más detalladamente a qué hacen referencia cada variable en cuestión.
+Dentro del archivo 'main.py' se especifica más detalladamente a qué hace referencia cada variable en cuestión y
+cómo se deben manipular los datos.
 
 
 ----------------------------------------------------------------

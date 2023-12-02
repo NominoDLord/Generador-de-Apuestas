@@ -13,7 +13,7 @@
 from PIL import Image
 import hashlib
 
-def comparar(img_referencia, img_capturada, umbral=0.9) -> bool:
+def comparar(img_referencia, img_capturada, umbral=1) -> bool:
     """
     Compara dos imágenes para determinar su similitud.
 

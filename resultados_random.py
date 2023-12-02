@@ -10,6 +10,11 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
+"""
+MÓDULO para la generación de resultados booleanos.
+
+"""
+
 from random import choice as elegir
 
 def generar_resultado(trues: int, falses: int) -> bool:
