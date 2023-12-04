@@ -88,8 +88,8 @@ def mantener_boton_izquierdo(pos_ini_x, pos_ini_y, seg=0, pos_fin_x=None, pos_fi
     """
     Mantiene pulsado el botón izquierdo del ratón.
     Si no se especifican los argumentos X/Y finales, la pulsación se mantendrá en su posición inicial.
-    Al especificar los argumentos X o Y finales, la pulsación del ratón se mantendrá y se moverá seleccionando así
-    los elementos existentes entre su podición inicial y su posición final.
+    Al especificar los argumentos X o Y finales, la pulsación del ratón se mantendrá y se moverá, seleccionando
+    así los elementos existentes entre su podición inicial y su posición final.
 
     @param pos_ini_x: Posición de Coordenada X Inicial.
     @param pos_ini_y: Posición de Coordenada Y Inicial.

@@ -39,5 +39,3 @@ def captura(nombre, ruta, pos_x=0, pos_y=0, ancho=1920, alto=1080):
     imagen_capturada = capturar_pantalla()
     guardar = f"{ruta}{nombre}.png"
     guardar_imagen(imagen_capturada, guardar)
-
-    pass

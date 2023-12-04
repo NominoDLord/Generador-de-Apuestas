@@ -19,7 +19,7 @@ ESTADO: En desarrollo...
 >
 > ---
 
-### ***::: INFORMACIÓN :::***
+### *::: INFORMACIÓN :::*
 
 *Automatización de apuestas en plataformas OnLine.*
 
@@ -43,7 +43,7 @@ cómo se deben manipular los datos.
 
 ---
 
-### ***::: ESTRUCTURA :::***
+### *::: ESTRUCTURA :::*
 ```
 Generador-de-Apuestas/
 |
@@ -75,7 +75,7 @@ Generador-de-Apuestas/
 
 ---
 
-### ***::: NORMAS DE USO :::***
+### *::: NORMAS DE USO :::*
 
 El contenido que se encuentra en este repositorio esta sujeto a ciertas normas de uso:
 
@@ -89,7 +89,7 @@ Hacer un mal uso del contenido conllevará a acciones legales contra la persona 
 
 ---
 
-### ***::: CONTACTO :::***
+### *::: CONTACTO :::*
 
 > AUTOR: Nômino D Lord
 > 

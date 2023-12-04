@@ -80,13 +80,12 @@
                           ejecutar la estratégia.
 
 
-Dentro del repositorio se encuentra un archivo llamado 'obtener_coordenadas_cursor.py' con el que se pueden obtener
-las coordenadas de la posición del cursor para ayudar a generar los valores en los que se requiere de una posición.
-    https://github.com/NominoDLord/Generador-de-Apuestas
+Dentro del repositorio se encuentra un archivo llamado 'obtener_coordenadas_cursor.pyw' con el que se pueden obtener
+las coordenadas de la posición del cursor para ayudar a generar los valores de las variables.
+    https://github.com/NominoDLord/Generador-de-Apuestas/tree/main/src/utils
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
-
 
 from typing import List
 from time import sleep
@@ -94,15 +93,15 @@ from random import choice as elegir
 from pyautogui import press as pulsar
 from datetime import datetime
 
-from mMouse import definir_posicion_cursor, pulsar_boton_izquierdo
+from moduls.mMouse import definir_posicion_cursor  # (pos_x: int, pos_y: int)
+from moduls.mMouse import pulsar_boton_izquierdo  # (pulsar=1)
 
-from capturar_pantalla import captura  # (nombre, ruta, pos_x=0, pos_y=0, ancho=1920, alto=1080)
-from comparar_imagenes import comparar  # (img_referencia, img_capturada, umbral=0.9) -> bool
-
+from moduls.capturar_pantalla import captura  # (nombre, ruta, pos_x=0, pos_y=0, ancho=1920, alto=1080)
+from moduls.comparar_imagenes import comparar  # (ruta_img_referencia, ruta_img_capturada, umbral=0.9)
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global saldo
+global saldo  # Este será el saldo que se irá actualizando en cada ronda.
 global saldo_final
 global lista_resultados
 global proporcion_trues
