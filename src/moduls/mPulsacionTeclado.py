@@ -39,6 +39,4 @@ apuesta_txt = str(apuesta)
 
 sleep(2)
 
-for digito in apuesta_txt:
-    pyautogui.press(digito)
-    sleep(0.2)
+

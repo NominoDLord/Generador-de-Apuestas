@@ -292,14 +292,6 @@ while True:  # SE INICIA LA SECUENCIA DE APUESTAS
     la apuesta dependerá de los anteriores resultados, la imagen resultante variará y como consecuencia, no podemos
     definirla como la imagen de referencia a comparar. """
 
-    print(f"RONDA: {str(rondas)}")
-    print(f"SALDO: {str(saldo)}")
-    print(f"APUESTA: {str(cantidad_apostada)}")
-    print(f"RESULTADO: {str(resultado_ronda)}")
-    print(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}")
-    print(f"BENEFICIO: {str(round((saldo - SALDO_INICIAL), 2))}")
-    print("--------------------------------------------------")
-
     if resultado_ronda is True:
         definir_posicion_cursor(1150, 850)  # El cursor se posiciona encima del botón de "Recibir Ganancias".
         sleep(0.5)
@@ -321,6 +313,14 @@ while True:  # SE INICIA LA SECUENCIA DE APUESTAS
     sleep(0.5)
     guardar_resultados(resultado_ronda)  # Guarda los resultados en archivos de texto.
     sleep(0.5)
+
+    print(f"RONDA: {str(rondas)}")
+    print(f"SALDO: {str(saldo)}")
+    print(f"APUESTA: {str(cantidad_apostada)}")
+    print(f"RESULTADO: {str(resultado_ronda)}")
+    print(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}")
+    print(f"BENEFICIO: {str(round((saldo - SALDO_INICIAL), 2))}")
+    print("--------------------------------------------------")
 
     definir_posicion_cursor(795, 975)  # El cursor se posiciona en el valor de la apuesta.
     sleep(0.5)

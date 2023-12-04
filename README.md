@@ -1,31 +1,34 @@
--     ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####  
-      ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##
-      ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##
-      ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##
-      ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####  
+```
+##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####  
+###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##
+## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##
+##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##
+##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####  
+```
+---
 
-REPOSITORIO:
+# Generador de Apuestas
 
-· 	[Generador de apuestas] (https://github.com/NominoDLord/Generador-de-Apuestas)
+ESTADO: En desarrollo...
 
-----------------------------------------------------------------
+> ---
+> *LICENSE:*
+>
+> Creative Commons Attribution-NonCommercial 4.0 International
+> > Copyright (c) 2023 Nômino D Lord
+>
+> ---
 
-	¡ ¡ ¡ IMPORTANTE ! ! !
+## ***::: INFORMACIÓN :::***
 
-ESTE PROGRAMA ES PARA USO PERSONAL Y ESTÁ TOTALMENTE PROHIBIDA SU DISTRUBUCIÓN CON FINES LUCRATIVOS.
+*Automatización de apuestas en plataformas OnLine.*
 
-SU AUTOR NO OBTIENE NINGÚN TIPO DE BENEFICIO AL PROPORCIONAR ESTE CÓDIGO POR LO QUE NO SE HACE RESPONSABLE DE LAS
-POSIBLES PERDIDAS QUE EL PROGRAMA PUEDAN GENERAR O DE SI SE HACE UN MAL USO DEL MISMO.
-----------------------------------------------------------------
+Este programa está pensado para automatizar la acción de apostar en un juego dentro de una plataforma.
 
-· INFORMACIÓN SOBRE EL PROGRAMA
-
-Este programa está pensado para que realice apuestas de forma automática en determinadas páginas de apuestas.
-
-El programa toma como referencia unas capturas de imágenes que se realizarán en cada ronda para comprabar el
+El programa toma como referencia unas capturas de imágenes que se realizarán en cada ronda para comprobar el
 estado de la apuesta (si se ha acertado o fallado).
 
-Para determina si una apuesta ha sido acertada o no se realiza una comparación con una captura que se tomará
+Para determinar si una apuesta ha sido acertada o no, se realiza una comparación con una captura que se tomará
 como referencia con la captura de pantalla actual después de la realización de la apuesta.
 
 A partir de esta comparación, la función para determinar si el resultado a sido acertado o no devolverá True o
@@ -38,7 +41,55 @@ Los valores deben ajustarse dependiendo de la plataforma que se utilice, el tipo
 Dentro del archivo 'main.py' se especifica más detalladamente a qué hace referencia cada variable en cuestión y
 cómo se deben manipular los datos.
 
+---
 
-----------------------------------------------------------------
-AUTOR:
-	Nômino D Lord
+## ***::: ESTRUCTURA :::***
+```
+Generador-de-Apuestas/
+|
+|-- .gitignore
+|-- README.md
+|
+|-- src/
+|   |-- main.py
+|   |
+|   |-- moduls/
+|   |   |-- mApuestas.py  (*)
+|   |
+|   |-- utils/
+|       |-- CoordenadasCursor.pyw
+|
+|-- tests/
+|   |-- tApuestas.py  (*)
+|
+|-- docs/
+|   |-- README.md
+|   |-- WorkFlow  (*)
+|
+|-- config/
+|   |-- config.py (*)
+|   |-- constants.py (*)
+```
+ \(*) (*Pendiente*).
+
+---
+
+## ***::: NORMAS DE USO :::***
+
+El contenido que se encuentra en este repositorio esta sujeto a ciertas normas de uso:
+
+```License
+1º Se permite su uso a cualquier persona/entidad siempre y cuando se acredite su procedencia.
+2º Se permite compartir, editar y adaptar el contenido según necesidades personales.
+3º Bajo ninguna circunstancia el contenido pueden ser usado con fines comerciales.
+```
+
+Hacer un mal uso del contenido conllevará a acciones legales contra la persona o entidad responsable.
+
+---
+
+## ***::: DATOS :::***
+
+> AUTOR: Nômino D Lord
+> E-MAIL: nominodlord@mailfence.com
+> DONAR: [PayPal](https://www.paypal.com/donate/?hosted_button_id=V7JFQBUUK5ZYA)
