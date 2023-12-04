@@ -19,7 +19,7 @@ ESTADO: En desarrollo...
 >
 > ---
 
-## ***::: INFORMACIÓN :::***
+### ***::: INFORMACIÓN :::***
 
 *Automatización de apuestas en plataformas OnLine.*
 
@@ -43,7 +43,7 @@ cómo se deben manipular los datos.
 
 ---
 
-## ***::: ESTRUCTURA :::***
+### ***::: ESTRUCTURA :::***
 ```
 Generador-de-Apuestas/
 |
@@ -57,6 +57,7 @@ Generador-de-Apuestas/
 |   |   |-- mApuestas.py  (*)
 |   |
 |   |-- utils/
+|       |-- CoordenadasCursor.py
 |       |-- CoordenadasCursor.pyw
 |
 |-- tests/
@@ -74,7 +75,7 @@ Generador-de-Apuestas/
 
 ---
 
-## ***::: NORMAS DE USO :::***
+### ***::: NORMAS DE USO :::***
 
 El contenido que se encuentra en este repositorio esta sujeto a ciertas normas de uso:
 
@@ -88,8 +89,10 @@ Hacer un mal uso del contenido conllevará a acciones legales contra la persona 
 
 ---
 
-## ***::: DATOS :::***
+### ***::: CONTACTO :::***
 
 > AUTOR: Nômino D Lord
+> 
 > E-MAIL: nominodlord@mailfence.com
+> 
 > DONAR: [PayPal](https://www.paypal.com/donate/?hosted_button_id=V7JFQBUUK5ZYA)
