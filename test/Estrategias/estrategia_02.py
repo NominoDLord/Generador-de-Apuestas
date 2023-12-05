@@ -11,7 +11,7 @@
 ########################################################################################################################
 
 """
-ESTRATEGIA 01
+ESTRATEGIA 02
 
     En esta estrategía se procede a calcular el valor de la apuesta en base a la proporción que existe entre los
     aciertos y los fallos generados en cada una de las rondas.
@@ -44,13 +44,13 @@ def calcular_apuesta(resultado, opciones_true, opciones_false):
     proporcion()
 
     if calcular_apuesta.proporcion_true > calcular_apuesta.proporcion_false:
-        apuesta = opciones_false
+        apuesta = opciones_false * 2
 
     elif calcular_apuesta.proporcion_true < calcular_apuesta.proporcion_false:
-        apuesta = opciones_true
+        apuesta = opciones_true * 2
 
     else:
-        apuesta = total_opciones / 2
+        apuesta = (total_opciones / 2) * 2
 
     return apuesta
 
