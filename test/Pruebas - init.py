@@ -48,39 +48,107 @@
 import importlib
 from random import choice as aleatorio
 
-from ContarRondas import rondas
-from GenerarProporcion import proporcion
-from ImprimirDatos import imprimir
-from ActualizarSaldo import introducir_saldo_inicial, obtener_saldo
-
 from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo (El archivo debe estar dentro de la carpeta `Registros`)
 from GenerarBools import generar_lista  # Args: trues, falses
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global saldo
+global saldos
 
+RONDA = 0
 SALDO_INICIAL = 250  # float(input("Introducir el saldo inicial: "))
 OPCIONES_TRUE = 3  # int(input("Número de opciones 'True': "))
 OPCIONES_FALSE = 1  # int(input("Número de opciones 'False': "))
 MULTIPLICADOR = 1.32  # float(input("Introducir 'Multiplicador' [Beneficio = (Apuesta * Multiplicador) - Apuesta]: "))
 
+# ================================================ CLASES & FUNCIONES ================================================ #
+
+def contar_rondas() -> int:
+    global RONDA
+    RONDA += 1
+    return RONDA
+
+
+def actualizar_saldo(apuesta: float, resultado: bool) -> float:
+
+    global saldos
+
+    """
+    @param apuesta: Cantidad apostada.
+    @param resultado: bool
+        True → Acertar
+        False → Fallar
+    @return: Saldo final.
+    """
+
+    # Iniciar variable 'saldo_actual' -----------------------------------------------------------------------------
+    if not hasattr(actualizar_saldo, "guardar_saldo_inicial"):
+        # Este bloque impedirá que el saldo se regenere al volver a llamar a la función.
+        saldos = SALDO_INICIAL
+    actualizar_saldo.guardar_saldo_inicial = True
+    # -------------------------------------------------------------------------------------------------------------
+
+    beneficio = (apuesta * MULTIPLICADOR) - apuesta
+
+    if resultado is True:
+        saldos += beneficio
+        saldo = round(saldos, 2)
+        return saldo
+
+    elif resultado is False:
+        saldos -= apuesta
+        saldo = round(saldos, 2)
+        return saldo
+
+def generar_proporcion(resultado_ronda):
+
+    # -------------------------------------------------------------------------------------------------------------
+    # Inicializar proporcion_true y proporcion_false si no existen
+    if not hasattr(generar_proporcion, "proporcion_true"):
+        generar_proporcion.proporcion_true = 0
+    if not hasattr(generar_proporcion, "proporcion_false"):
+        generar_proporcion.proporcion_false = 0
+    # -------------------------------------------------------------------------------------------------------------
+
+    if resultado_ronda is True:
+        generar_proporcion.proporcion_true += OPCIONES_FALSE
+
+    elif resultado_ronda is False:
+        generar_proporcion.proporcion_false += OPCIONES_TRUE
+
+    return generar_proporcion.proporcion_true, generar_proporcion.proporcion_false
+
+
+def imprimir_datos(rondas, saldo, cantidad_apostada, resultado_ronda):
+
+    proporcion_trues, proporcion_falses = generar_proporcion(resultado_ronda)
+
+    print(f"RONDA: {str(rondas)}")
+    print(f"SALDO: {str(saldo)}")
+    print(f"APUESTA: {str(cantidad_apostada)}")
+    print(f"RESULTADO: {str(resultado_ronda)}")
+    print(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}")
+    print(f"BENEFICIO: {str(round((saldo - SALDO_INICIAL), 2))}")
+    print("--------------------------------------------------")
+
+
+# =================================================== [ EJECUCIÓN ] ================================================== #
+
 # PRUEBAS: TEXTO --------------------------------------------------------------------------------------------------
 
 def generar_prueba_texto(usar: int = 0):
-    global saldo
+
+    global RONDA
+
     """
     Para 'usar' correctamente la función, se deberá establecer el número que corresponde al módulo que se quiere usar.
 
-    @param usar: Esta variable define el módulo de la estrategia a importar.
+    @param usar: Esta variable define el módulo a importar.
     @return: En caso de que `usar` sea 0, la función no será usada.
     """
 
     if usar == 0:
         return
-
-    introducir_saldo_inicial(SALDO_INICIAL)
-    saldo = SALDO_INICIAL
 
     nombre_modulo = f"Estrategias.estrategia_0{usar}"
     estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
@@ -90,50 +158,48 @@ def generar_prueba_texto(usar: int = 0):
 
     for resultado in resultados:
 
-        ronda = rondas()
-        apuesta = estrategia.calcular_apuesta(resultado, OPCIONES_TRUE, OPCIONES_FALSE)
-        saldo = obtener_saldo(saldo, apuesta, MULTIPLICADOR, resultado)
+        RONDA = contar_rondas()
+        apuesta_generada = estrategia.calcular_apuesta(resultado, OPCIONES_TRUE, OPCIONES_FALSE)
+        saldo = actualizar_saldo(apuesta_generada, resultado)
 
-        imprimir(SALDO_INICIAL, ronda, saldo, OPCIONES_TRUE, OPCIONES_FALSE, apuesta, resultado)
+        imprimir_datos(RONDA, saldo, apuesta_generada, resultado)
 
         if saldo < 100:
             break
 
 
 # PRUEBAS: RANDOM -------------------------------------------------------------------------------------------------
-"""
-def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
+
+def generar_prueba_random(usar: int = 0, rondas: int = 0):
+
+    global RONDA
 
     if usar == 0:
         return
 
-"""
-    # Para 'usar' correctamente la función, se deberá establecer el número que corresponde al módulo que se quiere usar.
+    """
+    Para 'usar' correctamente la función, se deberá establecer el número que corresponde al módulo que se quiere usar.
 
-    # @param usar: Esta variable define el módulo de la estrategia a importar.
-    # @return: En caso de que `usar` sea 0, la función no será usada.
-"""
+    @param usar: Esta variable define el módulo a importar.
+    @return: En caso de que `usar` sea 0, la función no será usada.
+    """
 
     nombre_modulo = f"Estrategias.estrategia_0{usar}"
     estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
 
     lista = generar_lista(OPCIONES_TRUE, OPCIONES_FALSE)
 
-    ronda = rondas()
+    while RONDA < rondas:
 
-    while ronda <= max_rondas:
-
+        RONDA = contar_rondas()
         resultado = aleatorio(lista)
         apuesta_generada = estrategia.calcular_apuesta(resultado, OPCIONES_TRUE, OPCIONES_FALSE)
         saldo = actualizar_saldo(apuesta_generada, resultado)
 
-        imprimir(SALDO_INICIAL, ronda, saldo, OPCIONES_TRUE, OPCIONES_FALSE, apuesta_generada, resultado)
-        ronda = rondas()
+        imprimir_datos(RONDA, saldo, apuesta_generada, resultado)
 
         if saldo < 100:
             break
-"""
 
 generar_prueba_texto(1)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
-
-# generar_prueba_random(1, 1000)  # Pruebas en caso de usar el módulo 'GenerarBools'.
+generar_prueba_random(0, 1000)  # Pruebas en caso de usar el módulo 'GenerarBools'.

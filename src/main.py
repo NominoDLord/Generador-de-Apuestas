@@ -102,6 +102,7 @@ from moduls.comparar_imagenes import comparar  # (ruta_img_referencia, ruta_img_
 # ================================================== [ VARIABLES ] =================================================== #
 
 global saldo  # Este será el saldo que se irá actualizando en cada ronda.
+global saldos
 global saldo_final
 global lista_resultados
 global proporcion_trues
@@ -113,12 +114,13 @@ INCREMENTO = 0.5
 V_MIN = 0.30
 V_MAX = 99.00
 LIMITE_RIESGO = 0.005
-SALDO_INICIAL = 400
+SALDO_INICIAL = 250
 OPCIONES_ACIERTOS = 3
 OPCIONES_FALLOS = 1
 OPCIONES_TOTALES = OPCIONES_ACIERTOS + OPCIONES_FALLOS
-MULTIPLICADOR = OPCIONES_FALLOS / OPCIONES_ACIERTOS
+# MULTIPLICADOR = OPCIONES_FALLOS / OPCIONES_ACIERTOS
 PROBABILIDAD = (OPCIONES_ACIERTOS / OPCIONES_TOTALES) * 100
+MULTIPLICADOR = 1.32
 
 nombre_usuario = "Ferran"
 fecha_actual = datetime.now()
@@ -179,12 +181,15 @@ def guardar_resultados(resultado):
         archivo2.write(f"SALDO: {str(saldo)}" + "\n")
         archivo2.write(f"APUESTA: {str(cantidad_apostada)}" + "\n")
         archivo2.write(f"RESULTADO: {str(resultado_ronda)}" + "\n")
-        archivo2.write(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}" + "\n")
+        # archivo2.write(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}" + "\n")
         archivo2.write(f"BENEFICIO: {str(round((saldo - SALDO_INICIAL), 2))}" + "\n")
         archivo2.write("--------------------------------------------------" + "\n")
 
 
 def actualizar_saldo(apuesta: float, resultado: bool) -> float:
+
+    global saldos
+
     """
     @param apuesta: Cantidad apostada.
     @param resultado: bool
@@ -192,65 +197,65 @@ def actualizar_saldo(apuesta: float, resultado: bool) -> float:
         False → Fallar
     @return: Saldo final.
     """
-    global saldo_final
-    # Crear lista inicial -----------------------------------------------------------------------------------------
+
+    # Iniciar variable 'saldo_actual' -----------------------------------------------------------------------------
     if not hasattr(actualizar_saldo, "guardar_saldo_inicial"):
         # Este bloque impedirá que el saldo se regenere al volver a llamar a la función.
-        saldo_final = SALDO_INICIAL
+        saldos = SALDO_INICIAL
     actualizar_saldo.guardar_saldo_inicial = True
     # -------------------------------------------------------------------------------------------------------------
-    beneficio = apuesta * MULTIPLICADOR
 
-    if resultado is False:
-        saldo_final -= apuesta
-        return saldo_final
+    beneficio = (apuesta * MULTIPLICADOR) - apuesta
 
-    elif resultado is True:
-        saldo_final += beneficio
-        return saldo_final
+    if resultado is True:
+        saldos += beneficio
+        saldo_actual = round(saldos, 2)
+        return saldo_actual
 
-
-def calcular_apuesta(lista, resultado):
-    global proporcion_trues
-    global proporcion_falses
-
-    def contar_valores(listas):
-        true_count, false_count = 0, 0
-
-        for elemento in listas:
-            true_count += elemento.count(True)
-            false_count += elemento.count(False)
-        return true_count, false_count
-
-    if resultado is True and len(lista_variable_trues) > 0:
-        lista_variable_trues.pop()
-
-    if resultado is False and len(lista_variable_falses) > 0:
-        lista_variable_falses.pop()
+    elif resultado is False:
+        saldos -= apuesta
+        saldo_actual = round(saldos, 2)
+        return saldo_actual
 
 
-    listas_trues_falses = [lista, lista_variable_trues, lista_variable_falses]
-    total_trues, total_falses = contar_valores(listas_trues_falses)
 
-    proporcion_trues = total_trues * OPCIONES_FALLOS
-    proporcion_falses = total_falses * OPCIONES_ACIERTOS
 
-    if proporcion_trues > proporcion_falses:
-        apostar = OPCIONES_FALLOS * INCREMENTO
-        return apostar
+def calcular_apuesta(resultado, opciones_true, opciones_false):
+    # -------------------------------------------------------------------------------------------------------------
+    # Inicializar proporcion_true y proporcion_false si no existen
+    if not hasattr(calcular_apuesta, "proporcion_true"):
+        calcular_apuesta.proporcion_true = 0
+    if not hasattr(calcular_apuesta, "proporcion_false"):
+        calcular_apuesta.proporcion_false = 0
+    # -------------------------------------------------------------------------------------------------------------
+    total_opciones = opciones_true + opciones_false
 
-    elif proporcion_trues < proporcion_falses:
-        apostar = OPCIONES_ACIERTOS * INCREMENTO
-        return apostar
+    def proporcion():
+
+        if resultado is True:
+            calcular_apuesta.proporcion_true += opciones_false
+
+        elif resultado is False:
+            calcular_apuesta.proporcion_false += opciones_true
+
+    proporcion()
+    num = 1
+
+    if calcular_apuesta.proporcion_true > calcular_apuesta.proporcion_false:
+        apuesta = opciones_false * num
+
+    elif calcular_apuesta.proporcion_true < calcular_apuesta.proporcion_false:
+        apuesta = opciones_true * num
 
     else:
-        apostar = (OPCIONES_TOTALES / 2) * INCREMENTO
-        return apostar
+        apuesta = total_opciones / 2
+
+    return apuesta
 
 # =================================================== [ EJECUCIÓN ] ================================================== #
+sleep(6)
 
-
-lista_variable_trues, lista_variable_falses = generar_listas_100()
+lista_variable_trues, lista_variable2_falses = generar_listas_100()
 
 # SE INICIA LA PRIMERA APUESTA ------------------------------------------------------------------------------------
 cantidad_apostada = (OPCIONES_TOTALES / 2) * INCREMENTO
@@ -268,19 +273,19 @@ while True:  # SE INICIA LA SECUENCIA DE APUESTAS
     rondas = contar_rondas()
 
     definir_posicion_cursor(1150, 850)  # El cursor se posiciona encima del botón de "Apostar".
-    sleep(0.5)
+    sleep(1)
     pulsar_boton_izquierdo()  # Pulsar el Botón "Jugar" para aceptar la ronda y la cantidad a apostar.
-    sleep(0.5)
+    sleep(1)
     definir_posicion_cursor(1575, 820)  # El cursor se posiciona encima del botón de la opción a apostar.
     """
     NOTA: La posición de la opción a apostar siempre debe ser la misma. De no ser así, implicaría una variable
           extra de aleatoriedad por nuestra parte con lo que generaría una probabilidad de acierto menor.
     """
-    sleep(0.5)
+    sleep(1)
     pulsar_boton_izquierdo()
     sleep(3)  # Espera a que se genere un resultado.
     captura(NOMBRE, RUTA_SAVE, POS_X, POS_Y, ANCHO, ALTO)  # Captura de la sección en la que se muestra el resultado.
-    sleep(0.5)
+    sleep(1)
     """ ¡IMPORTANTE!
     Antes de iniciar el programa, debemos de generar una captura de la región con un resultado fallido. """
     resultado_ronda = not comparar(RUTA_IMG_REFERENCIA, RUTA_IMG_CAPTURA)  # Se determinar si se ha acertado o fallado.
@@ -293,45 +298,46 @@ while True:  # SE INICIA LA SECUENCIA DE APUESTAS
 
     if resultado_ronda is True:
         definir_posicion_cursor(1150, 850)  # El cursor se posiciona encima del botón de "Recibir Ganancias".
-        sleep(0.5)
+        sleep(1)
         pulsar_boton_izquierdo()  # Pulsa el botón para recibir las ganancias.
-        sleep(0.5)
+        sleep(1)
         pulsar_boton_izquierdo()  # Pulsa el botón para "Continuar" a la próxima ronda.
-        sleep(0.5)
+        sleep(1)
 
     if resultado_ronda is False:
         definir_posicion_cursor(1150, 850)  # El cursor se posiciona encima del botón de "Continuar".
-        sleep(0.5)
+        sleep(1)
         pulsar_boton_izquierdo()  # Pulsa el botón para "Continuar" a la próxima ronda.
 
     lista_definida = generar_lista(resultado_ronda)  # Se guardan los resultados en la variable lista.
-    sleep(0.5)
-    cantidad_apostada = calcular_apuesta(lista_definida, resultado_ronda)  # Calcula el valor de la siguiente apuesta.
-    sleep(0.5)
+    sleep(1)
+    # Calcula el valor de la siguiente apuesta.
+    cantidad_apostada = calcular_apuesta(resultado_ronda, OPCIONES_ACIERTOS, OPCIONES_FALLOS)
+    sleep(1)
     saldo = actualizar_saldo(cantidad_apostada, resultado_ronda)  # Calcula el saldo después de definir la apuesta.
-    sleep(0.5)
+    sleep(1)
     guardar_resultados(resultado_ronda)  # Guarda los resultados en archivos de texto.
-    sleep(0.5)
+    sleep(1)
 
     print(f"RONDA: {str(rondas)}")
     print(f"SALDO: {str(saldo)}")
     print(f"APUESTA: {str(cantidad_apostada)}")
     print(f"RESULTADO: {str(resultado_ronda)}")
-    print(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}")
+    # 0print(f"PROPORCIÓN [T|F]: {str(proporcion_trues)} | {str(proporcion_falses)}")
     print(f"BENEFICIO: {str(round((saldo - SALDO_INICIAL), 2))}")
     print("--------------------------------------------------")
 
     definir_posicion_cursor(795, 975)  # El cursor se posiciona en el valor de la apuesta.
-    sleep(0.5)
+    sleep(1)
     pulsar_boton_izquierdo(2)  # Se selecciona el valor de la apuesta existente para reemplazarlo por la nueva.
-    sleep(0.5)
+    sleep(1)
     apostar_txt = str(cantidad_apostada)  # Convierte la apuesta en una cadena de texto para poder introducirla.
-    sleep(0.5)
+    sleep(1)
 
     for digito in apostar_txt:
         # Introduce la cantidad de la nueva apuesta.
         pulsar(digito)
         sleep(0.5)
 
-    if saldo < (SALDO_INICIAL / 2) or rondas == 10000 or (saldo - SALDO_INICIAL) > 1000:
+    if saldo < 150 or rondas == 10000 or (saldo - SALDO_INICIAL) > 2000:
         break
