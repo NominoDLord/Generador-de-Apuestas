@@ -19,8 +19,8 @@
 global ronda
 
 def rondas() -> int:
-    # Iniciar contador de rondas ----------------------------------------------------------------------------------
     global ronda
+    # Iniciar contador de rondas ----------------------------------------------------------------------------------
     if not hasattr(rondas, "iniciar"):
         # Este bloque impedirá que la ronda vuelva a obtener el valor inicial.
         ronda = 0

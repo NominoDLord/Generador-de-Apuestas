@@ -10,16 +10,12 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" ImprimirDatos
-
-    MÓDULO: Imprime los valores que se van generando en cada ronda.
-
+""" MÓDULO: ImprimirDatos
+Imprime los valores que se van generando en cada ronda.
 """
 
 from typing import List, Tuple
-
 from GenerarProporcion import proporcion
-
 
 def imprimir(saldo_inicial, ronda, saldo_actual, trues, falses, cantidad_apostada, resultado_ronda):
 
