@@ -86,7 +86,7 @@ def suma_repeticion_ronda(lista):
 
 def pruebas():
 
-    cantidad_rondas = 100
+    cantidad_rondas = 1883
     opciones_aciertos = 3
     opciones_fallos = 1
     opciones_totales = opciones_aciertos + opciones_fallos

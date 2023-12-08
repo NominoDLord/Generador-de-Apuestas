@@ -12,7 +12,7 @@
 
 """
 
-def suma_repeticion_ronda(lista):
+def suma_posicion(lista):
 
     repeticiones = 1
     suma = 0

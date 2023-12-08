@@ -10,44 +10,48 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" ESTRATEGIA 03
-Estrategia personalizada para " Egg Catcher "
+""" MÓDULO: GenerarProporcion
+    Calcula la proporción entre los valores Trues y Falses.
+    La proporción se basa en la diferencia entre opciones de Aciertos y Fallos.
+    La función devuelve la cantidad proporcional entre los dos valores.
 """
-from time import sleep
 
-global contador
+from typing import List, Tuple
 
-def calcular_apuesta(resultado):
-    global contador
-    # Inicializar contador ----------------------------------------------------------------------------------------
-    if not hasattr(calcular_apuesta, "iniciar_contador"):
-        contador = 0
-    calcular_apuesta.iniciar_contador = True
+
+def proporcion(trues: int, falses: int, resultado_ronda: bool) -> tuple[int, int]:
+
+    # -------------------------------------------------------------------------------------------------------------
+    # Inicializar proporcion_true y proporcion_false si no existen
+    if not hasattr(proporcion, "proporcion_true"):
+        proporcion.proporcion_true = 0
+    if not hasattr(proporcion, "proporcion_false"):
+        proporcion.proporcion_false = 0
     # -------------------------------------------------------------------------------------------------------------
 
-    contador = 0 if resultado is True else contador + 1
+    if resultado_ronda is True:
+        proporcion.proporcion_true += falses
 
-    if contador == 6:
-        # lista_apuestas = [0.3, 0.3, 0.3, 0.3, 0.3, 100]
-        sleep(5)
-        # apuesta = lista_apuestas[contador]
-        return 100
-    else:
-        return 0.3
+    elif resultado_ronda is False:
+        proporcion.proporcion_false += trues
+
+    return proporcion.proporcion_true, proporcion.proporcion_false
+
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------
 
 def prueba():
 
-    resultado = calcular_apuesta(False)
-    print(resultado)
-    resultado = calcular_apuesta(False)
-    print(resultado)
-    resultado = calcular_apuesta(False)
-    print(resultado)
-    resultado = calcular_apuesta(True)
-    print(resultado)
-    resultado = calcular_apuesta(False)
-    print(resultado)
+    calcular_proporcion = proporcion(3, 1, True)
+    print(calcular_proporcion)  # (1, 0)
+
+    calcular_proporcion = proporcion(3, 1, True)
+    print(calcular_proporcion)  # (2, 0)
+
+    calcular_proporcion = proporcion(3, 1, False)
+    print(calcular_proporcion)  # (2, 3)
+
+    calcular_proporcion = proporcion(3, 1, True)
+    print(calcular_proporcion)  # (3, 3)
 
 # prueba()

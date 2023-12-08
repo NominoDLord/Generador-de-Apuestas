@@ -10,7 +10,7 @@
 
 from typing import Tuple, List
 
-def contar_por_posicion(lista: List[bool], lng_t: int, lng_f: int) -> Tuple[List[int], List[int]]:
+def contar_posicion(lista: List[bool], lng_t: int, lng_f: int) -> Tuple[List[int], List[int]]:
 
     """
     La función contabiliza los valores "True" y "False" dentro de una lista.
