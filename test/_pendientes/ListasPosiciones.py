@@ -84,6 +84,15 @@ Proporción [True|False]: 1394 | 489
 Porcentaje [True|False]: 74.03 | 25.97
 Suma de posiciones [Trues]: 1394
 Suma de posiciones [False]: 489
+------------------------------------------------------------------------------------------------------------------------
+Nombre del archivo: Resultados[75-25](2)
+Posiciones de repetición [Trues]: [42, 29, 32, 20, 11, 16, 7, 7, 9, 1, 4, 0, 1, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Posiciones de repetición [False]: [126, 39, 12, 3, 0, 1, 0, 0]
+Proporción [True|False]: 731 | 258
+Porcentaje [True|False]: 73.91 | 26.09
+Suma de posiciones [Trues]: 731
+Suma de posiciones [False]: 258
+------------------------------------------------------------------------------------------------------------------------
 """
 
 #

@@ -12,9 +12,11 @@
     INFO:
     Se realiza una lectura del archivo de texto (~.txt) que contiene valores booleanos y los almacena en una lista.
 """
+global ruta_completa
 
 def leer_bools(nombre_archivo):
 
+    global ruta_completa
     valores = []  # Lista para almacenar los valores
     
     # Intentar abrir y leer el archivo

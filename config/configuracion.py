@@ -10,7 +10,7 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" CONFIGURACIÓN: En este archivo se configuran los parámetros fijos que usa el programa/módulos."""
+""" CONFIGURACIÓN: Parámetros fijos."""
 
 # ==============================================    IMPORTAR MÓDULOS    ============================================== #
 
@@ -25,8 +25,8 @@ from datetime import datetime
 
 SALDO_INICIAL = 300
 
-APUESTA_MIN = 0.30
-APUESTA_MAX = 99.00
+APUESTA_MINIMA = 0.30
+APUESTA_MAXIMA = 99.00
 MULTIPLICADOR = 1.32
 
 OPCIONES_TRUE = 3
@@ -48,15 +48,14 @@ fecha_actual = datetime.now()
 fecha_formateada = fecha_actual.strftime('%Y-%m-%d')
 
 # Parámetros para los argumentos del módulo 'capturar_pantalla'.
-NOMBRE = "captura"
-RUTA_SAVE = f"C:/Users/{nombre_usuario}/Pictures/SCREENS/"
-POS_X, POS_Y = 600, 300
-ANCHO, ALTO = 1080, 600
+NOMBRE_CAPTURA = "captura"
+RUTA_SAVE = f"C:/Users/{USER}/Pictures/SCREENS/"
+POS_X, POS_Y, ANCHO, ALTO = 600, 300, 1080, 600
 
 # Parámetros para los argumentos del módulo 'comparar_imagenes'.
-RUTA_IMG_REFERENCIA = f"C:/Users/{nombre_usuario}/Pictures/SCREENS/referencia.png"
-RUTA_IMG_CAPTURA = f"C:/Users/{nombre_usuario}/Pictures/SCREENS/captura.png"
-RUTA_RESULTADOS1 = f"C:/Users/{nombre_usuario}/Documents/Apuestas/Resultados [{fecha_formateada}].txt"
-RUTA_RESULTADOS2 = f"C:/Users/{nombre_usuario}/Documents/Apuestas/Registros [{fecha_formateada}].txt"
+RUTA_IMG_REFERENCIA = f"C:/Users/{USER}/Pictures/SCREENS/referencia.png"
+RUTA_IMG_CAPTURA = f"C:/Users/{USER}/Pictures/SCREENS/captura.png"
+RUTA_RESULTADOS1 = f"C:/Users/{USER}/Documents/Apuestas/Resultados [{fecha_formateada}].txt"
+RUTA_RESULTADOS2 = f"C:/Users/{USER}/Documents/Apuestas/Registros [{fecha_formateada}].txt"
 
 #

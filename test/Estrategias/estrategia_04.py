@@ -39,55 +39,31 @@ from config.configuracion import *
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global proporcion_true, proporcion_false
+global contador
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(rondas, resultados):
-
-    global proporcion_true, proporcion_false
+    global contador
 
     if rondas == 1:
-        proporcion_true = 0
-        proporcion_false = 0
+        contador = 0
 
-    def proporcion():
+    contador = 0 if resultados is True else contador + 1
 
-        global proporcion_true, proporcion_false
+    if contador == 8:
+        return APUESTA_MAXIMA
 
-        if resultados is True:
-            proporcion_true += OPCIONES_FALSE
-
-        elif resultados is False:
-            proporcion_false += OPCIONES_TRUE
-
-    proporcion()
-
-    if proporcion_true > proporcion_false:
-        apuesta = OPCIONES_FALSE * 1
-
-    elif proporcion_true < proporcion_false:
-        apuesta = OPCIONES_TRUE * 1
-
+    elif contador == 4:
+        return APUESTA_MAXIMA
     else:
-        apuesta = OPCIONES_TOTALES / 2
-
-    return apuesta
+        return APUESTA_MINIMA
 
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------
 
 def prueba():
 
-    apuesta = calcular_apuesta(1, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(2, False)
-    print(apuesta)
-    apuesta = calcular_apuesta(3, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(4, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(5, True)
-    print(apuesta)
+    pass
 
 # prueba()

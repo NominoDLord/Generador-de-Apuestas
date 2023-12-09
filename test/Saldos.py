@@ -10,35 +10,39 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" MÓDULO: ImprimirDatos
-Imprime los valores que se van generando en cada ronda.
+""" MÓDULO: Saldos
+
 """
+valor_min = None
+valor_max = None
 
-import sys
-import os
+def saldos_limite(saldos):
 
-subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(subDir1)
-from config.configuracion import *
+    global valor_max, valor_min
 
-from typing import List, Tuple
-from GenerarProporcion import proporcion
+    if (valor_max and valor_min) is None:
+        valor_min = saldos
+        valor_max = saldos
 
-def imprimir(rondas, saldos, apuestas, resultados):
+    if valor_max < saldos:
+        valor_max = saldos
 
-    cnt_trues, cnt_falses = proporcion(OPCIONES_TRUE, OPCIONES_FALSE, resultados)
+    if valor_min > saldos:
+        valor_min = saldos
 
-    print(f"RONDA: {str(rondas)}")
-    print(f"SALDO: {str(saldos)}")
-    print(f"APUESTA: {str(apuestas)}")
-    print(f"RESULTADO: {str(resultados)}")
-    print(f"PROPORCIÓN [T|F]: {str(cnt_trues)} | {str(cnt_falses)}")
-    print(f"BENEFICIO: {str(round((saldos - SALDO_INICIAL), 2))}")
-    print("--------------------------------------------------")
+    return valor_max, valor_min
+
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------
 
 def prueba():
-    pass
+    saldos_limite(10)
+    saldos_limite(5)
+    saldos_limite(7)
+    saldos_limite(12)
+    saldos_limite(6)
+    saldos_limite(14)
+    saldo_max, saldo_min = saldos_limite(11)
+    print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
 
 # prueba()

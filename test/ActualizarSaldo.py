@@ -14,21 +14,26 @@
 Actualiza el saldo en base a la apuesta, el resultado y el multiplicador.
 """
 
-global saldo_inicial
+import sys
+import os
 
-def introducir_saldo_inicial(saldo_introducido):
-    global saldo_inicial
-    saldo_inicial = saldo_introducido
+# Obtén la ruta al directorio anterior
+subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-def obtener_saldo(saldos: float, apuesta: float, multiplicador: float, resultado: bool) -> float:
+# Agrega los directorios anteriores al sys.path
+sys.path.append(subDir1)
+
+from config.configuracion import *
+
+
+def obtener_saldo(saldos: float, apuesta: float, resultado: bool) -> float:
     """
     @param saldos: Saldo (inicial).
     @param apuesta: Valor de la apuesta.
-    @param multiplicador: Incremento del valor de la apuesta en caso de acertar.
     @param resultado: True → Acertar, False → Fallar.
     @return: Saldo (final).
     """
-    beneficio = (apuesta * multiplicador) - apuesta
+    beneficio = (apuesta * MULTIPLICADOR) - apuesta
 
     saldo = saldos + beneficio if resultado is True else saldos - apuesta
     saldo = round(saldo, 2)
@@ -37,17 +42,19 @@ def obtener_saldo(saldos: float, apuesta: float, multiplicador: float, resultado
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------
 
+
+
 def prueba():
 
     introducir_saldo_inicial(300)
 
-    saldo_actualizado = obtener_saldo(300, 5, 1.32, True)
+    saldo_actualizado = obtener_saldo(300, 5, True)
     print(saldo_actualizado)  # 301.6
 
-    saldo_actualizado = obtener_saldo(301.6, 5, 1.32, False)
+    saldo_actualizado = obtener_saldo(301.6, 5, False)
     print(saldo_actualizado)  # 296.6
 
-    saldo_actualizado = obtener_saldo(296.6, 5, 1.32, True)
+    saldo_actualizado = obtener_saldo(296.6, 5, True)
     print(saldo_actualizado)  # 298.2
 
     print(saldo_inicial)  # 300

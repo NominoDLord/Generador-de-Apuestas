@@ -86,7 +86,7 @@ def suma_repeticion_ronda(lista):
 
 def pruebas():
 
-    cantidad_rondas = 1883
+    cantidad_rondas = 1000
     opciones_aciertos = 3
     opciones_fallos = 1
     opciones_totales = opciones_aciertos + opciones_fallos
@@ -112,4 +112,4 @@ def pruebas():
     print(f"Suma Repeticiones [Total]:{suma_repeticion_trues + suma_repeticion_false}")
     return
 
-pruebas()
+# pruebas()
