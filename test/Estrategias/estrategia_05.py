@@ -35,59 +35,107 @@ sys.path.append(subDir1)
 sys.path.append(subDir2)
 
 from config.configuracion import *
-
+from time import sleep
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global proporcion_true, proporcion_false
+global contador, lista
+global incremento_2, incremento_3, incremento_4, incremento_5, incremento_6, incremento_7, incremento_8, incremento_9
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(rondas, resultados):
-
-    global proporcion_true, proporcion_false
+    global contador, lista, incremento_2, incremento_3, incremento_4, incremento_5
+    global incremento_6, incremento_7, incremento_8, incremento_9
 
     if rondas == 1:
-        proporcion_true = 0
-        proporcion_false = 0
+        lista = []
+        contador = 0
+        incremento_2 = 0
+        incremento_3 = 0
+        incremento_4 = 0
+        incremento_5 = 0
+        incremento_6 = 0
+        incremento_7 = 0
+        incremento_8 = 0
+        incremento_9 = 0
 
-    def proporcion():
+    lista.append(resultados)
 
-        global proporcion_true, proporcion_false
+    if lista[-3:] == [False, False, True]:
+        incremento_2 = 0
 
-        if resultados is True:
-            proporcion_true += OPCIONES_FALSE
+    if lista[-4:] == [False, False, False, True]:
+        incremento_3 = 0
 
-        elif resultados is False:
-            proporcion_false += OPCIONES_TRUE
+    if lista[-5:] == [False, False, False, False, True]:
+        incremento_4 = 0
 
-    proporcion()
+    if lista[-6:] == [False, False, False, False, False, True]:
+        incremento_5 = 0
 
-    if proporcion_true > proporcion_false:
-        apuesta = OPCIONES_FALSE * 1
+    if lista[-7:] == [False, False, False, False, False, False, True]:
+        incremento_6 = 0
 
-    elif proporcion_true < proporcion_false:
-        apuesta = OPCIONES_TRUE * 1
+    if lista[-8:] == [False, False, False, False, False, False, False, True]:
+        incremento_7 = 0
+
+    if lista[-9:] == [False, False, False, False, False, False, False, False, True]:
+        incremento_8 = 0
+
+    if lista[-10:] == [False, False, False, False, False, False, False, False, False, True]:
+        incremento_9 = 0
+
+    contador = 0 if resultados is True else contador + 1
+
+    if contador == 2:
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_2 + 1)
+        return round(apuesta, 2)
+
+    elif contador == 3:
+        incremento_2 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_3 + 1)
+        return round(apuesta, 2)
+
+    elif contador == 4:
+        incremento_3 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_4 + 1)
+        return round(apuesta, 2)
+
+    elif contador == 5:
+        incremento_4 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_5 + 1)
+        return round(apuesta, 2)
+
+    elif contador == 6:
+        incremento_5 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_6)
+        return round(apuesta, 2)
+
+    elif contador == 7:
+        incremento_6 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_7)
+        return round(apuesta, 2)
+
+    elif contador == 8:
+        incremento_7 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_8)
+        return round(apuesta, 2)
+
+    elif contador == 9:
+        incremento_8 += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE * contador) * (contador ** incremento_9)
+        return round(apuesta, 2)
 
     else:
-        apuesta = OPCIONES_TOTALES / 2
+        incremento_9 += 1
+        return APUESTA_MINIMA
 
-    return apuesta
 
-
-# PRUEBAS --------------------------------------------------------------------------------------------------------------
+# PRUEBAS ---------------------------------------------------------------------------------------------------------
 
 def prueba():
 
-    apuesta = calcular_apuesta(1, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(2, False)
-    print(apuesta)
-    apuesta = calcular_apuesta(3, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(4, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(5, True)
-    print(apuesta)
+    pass
 
 # prueba()

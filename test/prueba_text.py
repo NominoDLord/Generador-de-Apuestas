@@ -71,6 +71,17 @@ total_apostado = None
 
 # ================================================== [ EJECUCIÓN ] =================================================== #
 
+apuesta_maxima = 0
+
+def apuesta_max(apuestas):
+
+    global apuesta_maxima
+
+    if apuesta_maxima < apuestas:
+        apuesta_maxima = apuestas
+
+    return apuesta_maxima
+
 # PRUEBAS: TEXTO --------------------------------------------------------------------------------------------------
 
 def generar_prueba_texto(usar: int = 0):
@@ -102,11 +113,12 @@ def generar_prueba_texto(usar: int = 0):
         premio = apuesta * MULTIPLICADOR if resultado is True else 0
 
         saldo_actual += premio
+        saldo_actual = round(saldo_actual, 2)
 
         imprimir(ronda, saldo_actual, apuesta, resultado)
 
         saldo_max, saldo_min = saldos_limite(saldo_actual)
-
+        apuesta_max(apuesta)
 
     # Final de ronda · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
 
@@ -119,7 +131,8 @@ def generar_prueba_texto(usar: int = 0):
         saldo_actual -= apuesta
 
     print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
+    print(f"APUESTA MÁXIMA: {apuesta_maxima}")
 
-generar_prueba_texto(1)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
+generar_prueba_texto(6)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
 
 #
