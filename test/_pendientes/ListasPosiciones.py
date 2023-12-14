@@ -77,6 +77,7 @@ def prueba():
 prueba()
 
 """
+------------------------------------------------------------------------------------------------------------------------
 Nombre del archivo: Resultados[75-25](1)
 Posiciones de repetición [Trues]: [103, 80, 49, 44, 27, 23, 23, 9, 8, 3, 2, 5, 1, 4, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Posiciones de repetición [False]: [299, 70, 12, 1, 2, 0, 0, 0]
@@ -93,6 +94,21 @@ Porcentaje [True|False]: 73.91 | 26.09
 Suma de posiciones [Trues]: 731
 Suma de posiciones [False]: 258
 ------------------------------------------------------------------------------------------------------------------------
+Nombre del archivo: Resultados[75-25](3)
+Posiciones de repetición [Trues]: [108, 80, 53, 47, 24, 17, 12, 11, 10, 4, 5, 4, 3, 2, 2, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Posiciones de repetición [False]: [283, 76, 19, 4, 2, 0, 0, 0]
+Proporción [True|False]: 1394 | 518
+Porcentaje [True|False]: 72.91 | 27.09
+Suma de posiciones [Trues]: 1394
+Suma de posiciones [False]: 518
+========================================================================================================================
+Nombre del archivo: Total[75-25]
+Posiciones de repetición [Trues]: [253, 188, 133, 111, 63, 56, 42, 27, 27, 8, 11, 9, 5, 6, 5, 1, 2, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+Posiciones de repetición [False]: [708, 185, 43, 8, 4, 1, 0, 0, 0]
+Proporción [True|False]: 3519 | 1265
+Porcentaje [True|False]: 73.56 | 26.44
+Suma de posiciones [Trues]: 3519
+Suma de posiciones [False]: 1265
 """
 
 #

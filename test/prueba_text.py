@@ -133,6 +133,6 @@ def generar_prueba_texto(usar: int = 0):
     print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
     print(f"APUESTA MÁXIMA: {apuesta_maxima}")
 
-generar_prueba_texto(6)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
+generar_prueba_texto(3)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
 
 #

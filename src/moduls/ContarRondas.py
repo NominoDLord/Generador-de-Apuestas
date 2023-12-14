@@ -10,55 +10,42 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" ESTRATEGIA 03
-Estrategia personalizada para " Egg Catcher "
+""" ContarRondas
+
+    MÓDULO: Realiza la cuenta del número de rondas generadas.
+
 """
 
-import sys
-import os
+global ronda
 
-subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-subDir2 = os.path.abspath(os.path.join(subDir1, '..'))
-
-sys.path.append(subDir1)
-sys.path.append(subDir2)
-
-from config.configuracion import *
-
-from time import sleep
-
-global contador
-
-def calcular_apuesta(rondas, resultados):
-    global contador
-
-    if rondas == 1:
-        contador = 0
-
-    contador = 0 if resultados is True else contador + 1
-
-    if contador == 1:
-        return 50
-
-    elif contador == 2:
-        return APUESTA_MAXIMA
-
-    elif contador == 3:
-        return APUESTA_MAXIMA
-
-    elif contador == 5:
-        return APUESTA_MAXIMA
-
-    elif contador == 6:
-        return APUESTA_MAXIMA
-
-    else:
-        return APUESTA_MINIMA
+def rondas() -> int:
+    global ronda
+    # Iniciar contador de rondas ----------------------------------------------------------------------------------
+    if not hasattr(rondas, "iniciar"):
+        # Este bloque impedirá que la ronda vuelva a obtener el valor inicial.
+        ronda = 0
+    rondas.iniciar = True
+    # -------------------------------------------------------------------------------------------------------------
+    ronda += 1
+    return ronda
 
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------
 
 def prueba():
-    return None
+
+    global ronda
+
+    ronda = rondas()
+    print(type(ronda))  # <class 'int'>
+    print(ronda)  # 1
+    ronda = rondas()
+    print(ronda)  # 2
+    ronda = rondas()
+    print(ronda)  # 3
+    ronda = rondas()
+    print(ronda)  # 4
+    ronda = rondas()
+    print(ronda)  # 5
 
 # prueba()

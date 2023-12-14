@@ -87,6 +87,14 @@ las coordenadas de la posición del cursor para ayudar a generar los valores de 
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
 
+import sys
+import os
+subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(subDir1)
+from config.configuracion import *
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
 from typing import List
 from time import sleep
 from random import choice as elegir
