@@ -1,29 +1,26 @@
 ########################################################################################################################
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
 ##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
 ##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ########################################################################################################################
 
-""" CONFIGURACIÓN: Parámetros fijos."""
+""" CONFIGURACIÓN: Parámetros fijos """
 
 # ==============================================    IMPORTAR MÓDULOS    ============================================== #
 
 from typing import List
 from time import sleep
-from random import choice as elegir
-from pyautogui import press as pulsar
+from random import choice
+from pyautogui import press
 from datetime import datetime
 
+# =================================================  VALORES  FIJOS  ================================================= #
 
-# ==============================================  PARÁMETROS  GLOBALES  ============================================== #
-
-SALDO_INICIAL = 300
+SALDO_INICIAL = 500
 
 APUESTA_MINIMA = 0.30
 APUESTA_MAXIMA = 99.00
@@ -32,6 +29,8 @@ MULTIPLICADOR = 1.32
 OPCIONES_TRUE = 3
 OPCIONES_FALSE = 1
 
+# ···············································  VALORES  GENERADOS  ··············································· #
+
 OPCIONES_TOTALES = OPCIONES_TRUE + OPCIONES_FALSE
 
 PROBABILIDAD_TRUE = OPCIONES_TRUE / OPCIONES_TOTALES
@@ -39,6 +38,17 @@ PROBABILIDAD_FALSE = OPCIONES_FALSE / OPCIONES_TOTALES
 
 PORCENTAJE_TRUE = (OPCIONES_TRUE / OPCIONES_TOTALES) * 100
 PORCENTAJE_FALSE = (OPCIONES_FALSE / OPCIONES_TOTALES) * 100
+
+PROPORCION = OPCIONES_TRUE / OPCIONES_FALSE
+
+LISTA_RESULTADOS = []
+
+LISTA_TRUE = [True] * OPCIONES_TRUE
+LISTA_FALSE = [False] * OPCIONES_FALSE
+LISTA_OPCIONES = LISTA_TRUE + LISTA_FALSE
+
+LISTA_TRUES = [True] * int(PORCENTAJE_TRUE)
+LISTA_FALSES = [False] * int(PORCENTAJE_FALSE)
 
 # ==============================================  PARÁMETROS  PRIVADOS  ============================================== #
 

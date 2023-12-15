@@ -8,8 +8,8 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" ESTRATEGIA 03
-Se especifica una apuesta en base al número de repeticiones fallidas.
+""" ESTRATEGIA 00
+Estrategia base que consiste simplemente en realizar siempre la misma apuesta con el mismo valor.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -25,56 +25,21 @@ sys.path.append(subDir2)
 
 from config.configuracion import *
 
-# ================================================== [ VARIABLES ] =================================================== #
-
-repeticiones = 0
-
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(resultados):
-    global repeticiones
-
-    repeticiones = 0 if resultados is True else repeticiones + 1
-
-    if repeticiones == 0:
-        return 1
-
-    elif repeticiones == 1:
-        return 1
-
-    elif repeticiones == 2:
-        return 2
-
-    elif repeticiones == 3:
-        return 2
-
-    elif repeticiones == 4:
-        return 5
-
-    elif repeticiones == 5:
-        return 10
-
-    elif repeticiones == 6:
-        return 20
-
-    elif repeticiones == 7:
-        return 50
-
-    elif repeticiones == 8:
-        return 50
-
-    elif repeticiones == 9:
-        return 80
-
-    else:
-        return 99
+    """El argumento 'resultados' no es necesario, pero se incluye porque en los otros métodos sí que se usa,
+    por lo que implicaría modificar la llamada a la función, pero de esta forma, se pueden seguir usando sin
+    ninguna modificación y sin provocar errores"""
+    apuesta = APUESTA_MINIMA
+    return apuesta
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
     ronda = 0
-    while ronda < 50:
+    while ronda < 9:
         ronda += 1
 
         resultado = choice(LISTA_OPCIONES)

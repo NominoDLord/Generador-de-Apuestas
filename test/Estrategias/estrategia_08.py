@@ -8,7 +8,7 @@
 ##                                                                                                                    ##
 ########################################################################################################################
 
-""" ESTRATEGIA: 08
+""" ESTRATEGIA 08
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -27,23 +27,23 @@ from time import sleep
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global lista_repeticiones, ultima_repeticion, lista_resultados, repeticion, apuesta
+global apuesta
 global r01, r02, r03, r04, r05, r06, r07, r08
+
+repeticion = 0
+
+ultima_repeticion = []
+lista_repeticiones = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
-def calcular_apuesta(rondas, resultados, saldos):
+def calcular_apuesta(resultados, saldos):
 
     global lista_repeticiones, ultima_repeticion, lista_resultados, repeticion, apuesta
     global r01, r02, r03, r04, r05, r06, r07, r08
 
-    if rondas == 1:  # Se inicializan las variables.
-        lista_repeticiones = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ultima_repeticion = []
-        lista_resultados = []
-        repeticion = 0
 
-    lista_resultados.append(resultados)
+    LISTA_RESULTADOS.append(resultados)
     if len(lista_resultados) > 30:
         del lista_resultados[0]
 
@@ -56,8 +56,6 @@ def calcular_apuesta(rondas, resultados, saldos):
         """El resultado ha sido True, por lo tanto, se reinicia el valor de la posición repetida"""
         anterior_repeticion = ultima_repeticion[-2]
 
-        if
-        lista_repeticiones[anterior_repeticion - 1] = 0
 
         if len(ultima_repeticion) > 5:
             """Se van eliminando los datos que ya no son necesarios"""
@@ -77,9 +75,9 @@ def calcular_apuesta(rondas, resultados, saldos):
     if repeticion == 1:
         if lista_repeticiones[repeticion - 1] > 3:
 
-        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
-        lista_repeticiones[repeticion - 1] += 1
-        r01 = lista_repeticiones[repeticion - 1]
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
+            lista_repeticiones[repeticion - 1] += 1
+            r01 = lista_repeticiones[repeticion - 1]
 
     elif repeticion == 2:
         apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])

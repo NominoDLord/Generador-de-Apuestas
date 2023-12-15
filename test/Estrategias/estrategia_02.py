@@ -1,73 +1,71 @@
 ########################################################################################################################
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
 ##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
 ##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ########################################################################################################################
 
-"""
-ESTRATEGIA 02
-
-    En esta estrategía se procede a calcular el valor de la apuesta en base a la proporción que existe entre los
-    aciertos y los fallos generados en cada una de las rondas.
-
-    El valor de la apuesta constará de 3 posibles opciones:
-        · El número de opciones para aciertos.
-        · El número de opciones para fallos.
-        · La suma de las opciones para aciertos y fallos dividida entre dos.
-
+""" ESTRATEGIA 02
+La apuesta se realiza en base a la proporción entre los aciertos y los fallos.
+- Se establece una apuesta base para las veces en el que la proporción es igual.
+- Se establece una apuesta superior a la apuesta base cuando la proporción es negativa.
+- Se establece una apuesta inferior a la apuesta base cuando la proporción es negativa.
 """
 
-def calcular_apuesta(resultado, opciones_true, opciones_false):
-    # -------------------------------------------------------------------------------------------------------------
-    # Inicializar proporcion_true y proporcion_false si no existen
-    if not hasattr(calcular_apuesta, "proporcion_true"):
-        calcular_apuesta.proporcion_true = 0
-    if not hasattr(calcular_apuesta, "proporcion_false"):
-        calcular_apuesta.proporcion_false = 0
-    # -------------------------------------------------------------------------------------------------------------
-    total_opciones = opciones_true + opciones_false
+# ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
 
-    def proporcion():
+import sys
+import os
 
-        if resultado is True:
-            calcular_apuesta.proporcion_true += opciones_false
+subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+subDir2 = os.path.abspath(os.path.join(subDir1, '..'))
 
-        elif resultado is False:
-            calcular_apuesta.proporcion_false += opciones_true
+sys.path.append(subDir1)
+sys.path.append(subDir2)
 
-    proporcion()
+from config.configuracion import *
 
-    if calcular_apuesta.proporcion_true > calcular_apuesta.proporcion_false:
-        apuesta = opciones_false * 2
+from random import choice
 
-    elif calcular_apuesta.proporcion_true < calcular_apuesta.proporcion_false:
-        apuesta = opciones_true * 2
+# ================================================== [ VARIABLES ] =================================================== #
+
+cnt_resultados = 0  # Variable de inicialización
+
+# ================================================== [ FUNCIONES ] =================================================== #
+
+def calcular_apuesta(resultados):
+    global cnt_resultados
+
+    cnt_resultados = cnt_resultados + OPCIONES_FALSE if resultados is True else cnt_resultados - OPCIONES_TRUE
+    # print(cnt_resultados)
+
+    if cnt_resultados > 0:
+        apuesta = OPCIONES_FALSE
+
+    elif cnt_resultados < 0:
+        apuesta = OPCIONES_TRUE
 
     else:
-        apuesta = (total_opciones / 2) * 2
+        apuesta = (OPCIONES_TOTALES / 2)
 
-    return apuesta
+    return round(apuesta, 2)
 
-
-# PRUEBAS --------------------------------------------------------------------------------------------------------------
+# ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
-    apuesta = calcular_apuesta(True, 3, 1)
-    print(apuesta)
-    apuesta = calcular_apuesta(False, 3, 1)
-    print(apuesta)
-    apuesta = calcular_apuesta(True, 3, 1)
-    print(apuesta)
-    apuesta = calcular_apuesta(True, 3, 1)
-    print(apuesta)
-    apuesta = calcular_apuesta(True, 3, 1)
-    print(apuesta)
+    ronda = 0
+    while ronda < 100:
+        ronda += 1
+
+        resultado = choice(LISTA_OPCIONES)
+        apuesta = calcular_apuesta(resultado)
+        print(f"Ronda {ronda}\nApuesta: {apuesta}\nResultado: {resultado}")
+        print("--------------------")
+
+    return None
 
 # prueba()

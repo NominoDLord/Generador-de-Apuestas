@@ -99,13 +99,13 @@ def generar_prueba_texto(usar: int = 0):
     nombre_modulo = f"Estrategias.estrategia_0{usar}"
     estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
 
-    Nombre_Archivo = input("Nombre del archivo: ")  # Resultados[75-25](1)
+    Nombre_Archivo = input("Nombre del archivo: ")  # Resultados[75-25](1); Total[75-25]
     resultados = leer_bools(f"{Nombre_Archivo}.txt")  # Se crea una lista con los resultados obtenidos del archivo.
     total_rondas = len(resultados)
 
     ronda = rondas()  # Se inicia la secuencia de rondas
     resultado = None  # Se establece "None" como valor porque aún no hay ningún resultado generado.
-    apuesta = estrategia.calcular_apuesta(ronda, resultado)
+    apuesta = estrategia.calcular_apuesta(resultado)
     saldo_actual = SALDO_INICIAL - apuesta
 
     for resultado in resultados:
@@ -127,12 +127,12 @@ def generar_prueba_texto(usar: int = 0):
         if (total_rondas == (ronda + 1)) or (saldo_actual < 5):
             break
 
-        apuesta = estrategia.calcular_apuesta(ronda, resultado)
+        apuesta = estrategia.calcular_apuesta(resultado)
         saldo_actual -= apuesta
 
     print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
     print(f"APUESTA MÁXIMA: {apuesta_maxima}")
 
-generar_prueba_texto(3)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
+generar_prueba_texto(6)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
 
 #

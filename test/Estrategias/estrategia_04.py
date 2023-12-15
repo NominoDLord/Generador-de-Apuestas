@@ -1,26 +1,20 @@
 ########################################################################################################################
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
 ##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
 ##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ########################################################################################################################
 
-"""
-ESTRATEGIA 01
-
-    En esta estrategía se procede a calcular el valor de la apuesta en base a la proporción que existe entre los
-    aciertos y los fallos generados en cada una de las rondas.
-
-    El valor de la apuesta constará de 3 posibles opciones:
-        · El número de opciones para aciertos.
-        · El número de opciones para fallos.
-        · La suma de las opciones para aciertos y fallos dividida entre dos.
-
+""" ESTRATEGIA 04
+El resultado de la apuesta se limita a la proporción de los últimos 100 resultados.
+- Hasta generar los primeros 100 resultados, la apuesta es siempre la misma (se establece un valor base).
+- Una vez generados los 100 resultados:
+    · Si el porcentaje de aciertos es igual, la apuesta es el valor base.
+    · Si el porcentaje de aciertos es superior, la apuesta es un valor inferior al valor base.
+    · Si el porcentaje de aciertos es inferior, la apuesta es un valor superior al valor base.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -36,60 +30,46 @@ sys.path.append(subDir2)
 
 from config.configuracion import *
 
-
 # ================================================== [ VARIABLES ] =================================================== #
-
-global lista_resultados, lista_trues, lista_falses
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
-def calcular_apuesta(rondas, resultados):
-    global lista_resultados, lista_trues, lista_falses
+def calcular_apuesta(resultados):
 
-    if rondas == 1:
-        lista_resultados = []
-        lista_trues = [True] * int(PORCENTAJE_TRUE)
-        lista_falses = [False] * int(PORCENTAJE_FALSE)
+    LISTA_RESULTADOS.append(resultados)
 
-    def contar_valores(listas):
-        true_count, false_count = 0, 0
+    apuesta = OPCIONES_TOTALES / 2
 
-        for elemento in listas:
-            true_count += elemento.count(True)
-            false_count += elemento.count(False)
-        return true_count, false_count
+    if len(LISTA_RESULTADOS) > 100:
 
-    lista_resultados.append(resultados)
+        cnt_true = LISTA_RESULTADOS.count(True)
 
-    if resultados is True and len(lista_trues) > 0:
-        lista_trues.pop()
+        if cnt_true < PORCENTAJE_TRUE:
+            apuesta = OPCIONES_TRUE * 1
 
-    if resultados is False and len(lista_falses) > 0:
-        lista_falses.pop()
+        elif cnt_true > PORCENTAJE_TRUE:
+            apuesta = OPCIONES_FALSE * 1
 
-    listas_trues_falses = [lista_resultados, lista_trues, lista_falses]
-    total_trues, total_falses = contar_valores(listas_trues_falses)
+        else:
+            apuesta = OPCIONES_TOTALES / 2
 
-    proporcion_trues = total_trues * OPCIONES_FALSE
-    proporcion_falses = total_falses * OPCIONES_TRUE
+        del LISTA_RESULTADOS[0]
 
-    if proporcion_trues < proporcion_falses:
-        apostar = OPCIONES_TRUE * 1
-        return apostar
+    return round(apuesta, 2)
 
-    if proporcion_trues > proporcion_falses:
-        apostar = OPCIONES_FALSE * 1
-        return apostar
-
-    if proporcion_trues == proporcion_falses:
-        apostar = OPCIONES_TOTALES / 2
-        return apostar
-
-
-# PRUEBAS --------------------------------------------------------------------------------------------------------------
+# ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
-    pass
+    ronda = 0
+    while ronda < 1000:
+        ronda += 1
+
+        resultado = choice(LISTA_OPCIONES)
+        apuesta = calcular_apuesta(resultado)
+        print(f"Ronda {ronda}\nApuesta: {apuesta}\nResultado: {resultado}")
+        print("--------------------")
+
+    return None
 
 # prueba()

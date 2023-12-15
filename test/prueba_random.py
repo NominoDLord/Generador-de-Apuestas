@@ -109,41 +109,4 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
 
 generar_prueba_random(0, 1000)  # Pruebas en caso de usar el módulo 'GenerarBools'.
 
-
-# PRUEBAS: TEXTO --------------------------------------------------------------------------------------------------
-
-def generar_prueba_texto(usar: int = 0):
-    global saldo
-    """
-    Para 'usar' correctamente la función, se deberá establecer el número que corresponde al módulo que se quiere usar.
-
-    @param usar: Esta variable define el módulo de la estrategia a importar.
-    @return: En caso de que `usar` sea 0, la función no será usada.
-    """
-
-    if usar == 0:
-        return
-
-    saldo = SALDO_INICIAL  # Se inicializa el saldo con el saldo inicial.
-
-    nombre_modulo = f"Estrategias.estrategia_0{usar}"
-    estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
-
-    Nombre_Archivo = input("Nombre del archivo: ")  # Resultados[75-25](1)
-    resultados = leer_bools(f"{Nombre_Archivo}.txt")
-
-    for resultado in resultados:
-
-        ronda = rondas()
-        apuesta = estrategia.calcular_apuesta(resultado)
-        saldo = obtener_saldo(saldo, apuesta, MULTIPLICADOR, resultado)
-
-        imprimir(SALDO_INICIAL, ronda, saldo, OPCIONES_TRUE, OPCIONES_FALSE, apuesta, resultado)
-
-        if saldo < 5:
-            break
-
-generar_prueba_texto(0)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
-
-# 288
-# 1129
+#

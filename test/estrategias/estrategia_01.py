@@ -1,26 +1,15 @@
 ########################################################################################################################
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
 ##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
 ##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
 ##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
 ##                                                                                                                    ##
-##                                                                                                                    ##
 ########################################################################################################################
 
-"""
-ESTRATEGIA 01
-
-    En esta estrategía se procede a calcular el valor de la apuesta en base a la proporción que existe entre los
-    aciertos y los fallos generados en cada una de las rondas.
-
-    El valor de la apuesta constará de 3 posibles opciones:
-        · El número de opciones para aciertos.
-        · El número de opciones para fallos.
-        · La suma de las opciones para aciertos y fallos dividida entre dos.
-
+""" ESTRATEGIA 01
+La apuesta se incrementa en cada repetición de fallo en relación al total de perdidas anteriores.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -36,58 +25,31 @@ sys.path.append(subDir2)
 
 from config.configuracion import *
 
-
 # ================================================== [ VARIABLES ] =================================================== #
 
-global proporcion_true, proporcion_false
+repeticiones = 0  # Inicialización del número de repeticiones.
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
-def calcular_apuesta(rondas, resultados):
+def calcular_apuesta(resultados):
+    global repeticiones
+    repeticiones = 0 if resultados is True else repeticiones + 1
+    apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** repeticiones)
+    return round(apuesta, 2)
 
-    global proporcion_true, proporcion_false
-
-    if rondas == 1:
-        proporcion_true = 0
-        proporcion_false = 0
-
-    def proporcion():
-
-        global proporcion_true, proporcion_false
-
-        if resultados is True:
-            proporcion_true += OPCIONES_FALSE
-
-        elif resultados is False:
-            proporcion_false += OPCIONES_TRUE
-
-    proporcion()
-
-    if proporcion_true > proporcion_false:
-        apuesta = OPCIONES_FALSE * 1
-
-    elif proporcion_true < proporcion_false:
-        apuesta = OPCIONES_TRUE * 1
-
-    else:
-        apuesta = OPCIONES_TOTALES / 2
-
-    return apuesta
-
-
-# PRUEBAS --------------------------------------------------------------------------------------------------------------
+# ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
-    apuesta = calcular_apuesta(1, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(2, False)
-    print(apuesta)
-    apuesta = calcular_apuesta(3, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(4, True)
-    print(apuesta)
-    apuesta = calcular_apuesta(5, True)
-    print(apuesta)
+    ronda = 0
+    while ronda < 9:
+
+        ronda += 1
+        apuesta = calcular_apuesta(False)
+
+        print(f"Ronda {ronda}\nApuesta: {apuesta}\nResultado: {False}")
+        print("--------------------")
+
+    return None
 
 # prueba()

@@ -12,3 +12,5 @@ print(incremento * 2)
 
 del mi_lista[0]
 print(mi_lista)
+mi_lista.pop()
+print(mi_lista)
