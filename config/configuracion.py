@@ -20,7 +20,7 @@ from datetime import datetime
 
 # =================================================  VALORES  FIJOS  ================================================= #
 
-SALDO_INICIAL = 500
+SALDO_INICIAL = 1000
 
 APUESTA_MINIMA = 0.30
 APUESTA_MAXIMA = 99.00

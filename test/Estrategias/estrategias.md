@@ -13,10 +13,17 @@ Información sobre el tipo de estrategias.
 
 ## Estrategia 00
 
-Estrategia base que consiste simplemente en realizar siempre la misma apuesta con el mismo valor.
+```
+
+```
 
 
 ## Estrategia 01
+
+Estrategia base que consiste simplemente en realizar siempre la misma apuesta con el mismo valor.
+
+
+## Estrategia 02
 
 La apuesta se incrementa en cada repetición de fallo en relación al total de perdidas anteriores.
 
@@ -26,7 +33,7 @@ La apuesta se incrementa en cada repetición de fallo en relación al total de p
 | RESULTADO  | False  | False  | False  | False  | False  | False  | False  | False  | False  |
 
 
-## Estrategia 02
+## Estrategia 03
 
 La apuesta se realiza en base a la proporción entre los aciertos y los fallos:
 - Se establece una apuesta base para las veces en el que la proporción es igual.
@@ -34,12 +41,12 @@ La apuesta se realiza en base a la proporción entre los aciertos y los fallos:
 - Se establece una apuesta inferior a la apuesta base cuando la proporción es negativa.
 
 
-## Estrategia 03
+## Estrategia 04
 
 Se especifica una apuesta en base al número de repeticiones fallidas.
 
 
-## Estrategia 04
+## Estrategia 05
 
 El resultado de la apuesta se limita a la proporción de los últimos 100 resultados.
 
@@ -52,7 +59,7 @@ El resultado de la apuesta se limita a la proporción de los últimos 100 result
   - Si el porcentaje de aciertos es inferior, la apuesta es un valor superior al valor base.
 
 
-## Estrategia 05
+## Estrategia 06
 
 El resultado de la apuesta se limita a la proporción de los últimos 100 resultados.
 
@@ -61,10 +68,6 @@ El resultado de la apuesta se limita a la proporción de los últimos 100 result
 - Una vez generados los 100 resultados:
 
   - Cuanto mayor sea la proporción de fallos, la apuesta se incrementará.
-
-
-## Estrategia 06
-
 
 
 ## Estrategia 07
@@ -76,4 +79,5 @@ El resultado de la apuesta se limita a la proporción de los últimos 100 result
 
 
 ## Estrategia 09
+
 

@@ -10,9 +10,11 @@
 
 """ ESTRATEGIA 05
 El resultado de la apuesta se limita a la proporción de los últimos 100 resultados.
-- Hasta generar los primeros 100 resultados, la apuesta es la mínima.
+- Hasta generar los primeros 100 resultados, la apuesta es siempre la misma (se establece un valor base).
 - Una vez generados los 100 resultados:
-    · Cuanto mayor sea la proporción de fallos, la apuesta se incrementará.
+    · Si el porcentaje de aciertos es igual, la apuesta es el valor base.
+    · Si el porcentaje de aciertos es superior, la apuesta es un valor inferior al valor base.
+    · Si el porcentaje de aciertos es inferior, la apuesta es un valor superior al valor base.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -36,27 +38,22 @@ def calcular_apuesta(resultados):
 
     LISTA_RESULTADOS.append(resultados)
 
-    apuesta = APUESTA_MINIMA
+    apuesta = OPCIONES_TOTALES / 2
 
     if len(LISTA_RESULTADOS) > 100:
-        del LISTA_RESULTADOS[0]
 
-        contar_falses = LISTA_RESULTADOS.count(False)
+        cnt_true = LISTA_RESULTADOS.count(True)
 
-        if contar_falses > (PORCENTAJE_FALSE * 1.5):
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
+        if cnt_true < PORCENTAJE_TRUE:
+            apuesta = OPCIONES_TRUE * 1
 
-        elif contar_falses > (PORCENTAJE_FALSE * 1.4):
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 4)
-
-        elif contar_falses > (PORCENTAJE_FALSE * 1.3):
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 3)
-
-        elif contar_falses > (PORCENTAJE_FALSE * 1.2):
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 2)
+        elif cnt_true > PORCENTAJE_TRUE:
+            apuesta = OPCIONES_FALSE * 1
 
         else:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 1)
+            apuesta = OPCIONES_TOTALES / 2
+
+        del LISTA_RESULTADOS[0]
 
     return round(apuesta, 2)
 

@@ -23,114 +23,117 @@ sys.path.append(subDir1)
 sys.path.append(subDir2)
 
 from config.configuracion import *
-from time import sleep
 
 # ================================================== [ VARIABLES ] =================================================== #
 
 global apuesta
-global r01, r02, r03, r04, r05, r06, r07, r08
 
 repeticion = 0
-
-ultima_repeticion = []
-lista_repeticiones = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+repeticion_guardada = []
+lista_posiciones = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Ajustar según necesidad.
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
-def calcular_apuesta(resultados, saldos):
+def calcular_apuesta(resultados):
 
-    global lista_repeticiones, ultima_repeticion, lista_resultados, repeticion, apuesta
-    global r01, r02, r03, r04, r05, r06, r07, r08
-
-
-    LISTA_RESULTADOS.append(resultados)
-    if len(lista_resultados) > 30:
-        del lista_resultados[0]
-
-    contar_falses = lista_resultados.count(False)
+    global apuesta, repeticion
 
     repeticion = 0 if resultados is True else repeticion + 1
-    ultima_repeticion.append(repeticion)
+    repeticion_guardada.append(repeticion)
+
+    # ····· ¡ BLOQUE MUY IMPORTANTE ! ········································································
+    if len(repeticion_guardada) < 2:
+        # Esta acción es necesaria para poder ir acumulando el resultado anterior y el resultado recurrente.
+        repeticion_guardada.append(repeticion)
+    # ········································································································
+    anterior_posicion = repeticion_guardada[0]
 
     if repeticion == 0:
-        """El resultado ha sido True, por lo tanto, se reinicia el valor de la posición repetida"""
-        anterior_repeticion = ultima_repeticion[-2]
+
+        if (anterior_posicion - 1) == -1:  # Esto es en caso de que se repitan 2 (o más) resultados 'True' seguidos.
+            del repeticion_guardada[0]  # Elimina la posición anterior para poder guardar el siguiente nuevo resultado.
+            apuesta = APUESTA_MINIMA
+            return round(apuesta, 2)
+
+        if lista_posiciones[anterior_posicion - 1] > 3:
+            lista_posiciones[anterior_posicion - 1] -= 3
+            del repeticion_guardada[0]
+            return round(apuesta, 2)
+
+        # En caso de que el últmo reultado haya sido un 'False'...
+        lista_posiciones[anterior_posicion - 1] = 0  # ... esto reiniciará el contador de la posición repetida.
+        del repeticion_guardada[0]
+        return round(apuesta, 2)
 
 
-        if len(ultima_repeticion) > 5:
-            """Se van eliminando los datos que ya no son necesarios"""
-            del ultima_repeticion[0]
+    elif repeticion == 1:
 
-        if contar_falses > 10:
-            return APUESTA_MINIMA * 2
-        elif contar_falses > 15:
-            return APUESTA_MINIMA * 3
-        elif contar_falses > 20:
-            return APUESTA_MINIMA * 4
-        elif contar_falses > 25:
-            return APUESTA_MINIMA * 5
+        if lista_posiciones[repeticion - 1] > 4:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
         else:
-            return APUESTA_MINIMA
+            # Esto evaluará las veces que se han fallado en esta posición y se incrementará la apuesta en base a ello.
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+            # Esto incrementará en 1 la posición en caso de que el siguiente resultado sea 'False'.
+            lista_posiciones[repeticion - 1] += 1
 
-    if repeticion == 1:
-        if lista_repeticiones[repeticion - 1] > 3:
-
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
-            lista_repeticiones[repeticion - 1] += 1
-            r01 = lista_repeticiones[repeticion - 1]
 
     elif repeticion == 2:
-        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
-        lista_repeticiones[repeticion - 1] += 1
-        r02 = lista_repeticiones[repeticion - 1]
+
+        if lista_posiciones[repeticion - 1] > 4:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
+        else:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+            lista_posiciones[repeticion - 1] += 1
+
 
     elif repeticion == 3:
-        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
-        lista_repeticiones[repeticion - 1] += 1
-        r03 = lista_repeticiones[repeticion - 1]
+
+        if lista_posiciones[repeticion - 1] > 4:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
+        else:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+            lista_posiciones[repeticion - 1] += 1
+
 
     elif repeticion == 4:
-        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_repeticiones[repeticion - 1])
-        lista_repeticiones[repeticion - 1] += 1
-        r04 = lista_repeticiones[repeticion - 1]
+
+        if lista_posiciones[repeticion - 1] > 4:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
+        else:
+            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+            lista_posiciones[repeticion - 1] += 1
 
     elif repeticion == 5:
-        apuesta = 33
-        return apuesta
+        apuesta = 99
 
     elif repeticion == 6:
         apuesta = 99
-        return apuesta
 
     elif repeticion == 7:
         apuesta = 99
-        return apuesta
 
     elif repeticion == 8:
         apuesta = 99
-        return apuesta
 
     else:
         apuesta = APUESTA_MINIMA
 
+    del repeticion_guardada[0]
 
-    beneficios = (saldos - SALDO_INICIAL)
+    if apuesta > APUESTA_MAXIMA:
+        apuesta = APUESTA_MAXIMA
 
-    if beneficios < 0:
-        saldo_inv = abs(beneficios)
-        apuesta = saldo_inv * OPCIONES_TRUE
-        return round(apuesta, 2)
+    return round(apuesta, 2)
 
-    if apuesta > 30:
-        apuesta = 30
-        return round(apuesta, 2)
-
-
-# PRUEBAS ---------------------------------------------------------------------------------------------------------
+# ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
-
-
+    ronda = 0
+    while ronda < 1000:
+        ronda += 1
+        resultado = choice(LISTA_OPCIONES)
+        apuesta_calculada = calcular_apuesta(resultado)
+        print(f"Ronda {ronda}\nApuesta: {apuesta_calculada}\nResultado: {resultado}")
+        print("--------------------")
     return None
-
 # prueba()

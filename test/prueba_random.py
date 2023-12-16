@@ -44,6 +44,13 @@
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
 
+import sys
+import os
+
+subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(subDir1)
+from config.configuracion import *
+
 import importlib
 from random import choice as aleatorio
 
@@ -51,27 +58,49 @@ from ContarRondas import rondas
 # from ContarRepeticiones import contar
 from GenerarProporcion import proporcion
 from ImprimirDatos import imprimir
-from ActualizarSaldo import introducir_saldo_inicial, obtener_saldo
+from ActualizarSaldo import obtener_saldo
+from Saldos import saldos_limite
 
-from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo (El archivo debe estar dentro de la carpeta `Registros`)
 from GenerarBools import generar_lista  # Args: trues, falses
+from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo
+# El archivo debe estar dentro de la carpeta 'Registros'
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global saldo
+global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
+total_apostado = 0
 
-SALDO_INICIAL = 250  # float(input("Introducir el saldo inicial: "))
-OPCIONES_TRUE = 3  # int(input("Número de opciones 'True': "))
-OPCIONES_FALSE = 1  # int(input("Número de opciones 'False': "))
-MULTIPLICADOR = 1.32  # float(input("Introducir 'Multiplicador' [Beneficio = (Apuesta * Multiplicador) - Apuesta]: "))
+# ================================================== [ FUNCIONES ] =================================================== #
 
+
+
+def apuesta_maxima(apuestas):
+    global apuesta_max
+    if apuesta_max < apuestas:
+        apuesta_max = apuestas
+    return apuesta_max
+
+def saldo_maximo(saldos):
+    global saldo_max
+    if saldo_max < saldos:
+        saldo_max = saldos
+    return saldo_max
+
+def saldo_minimo(saldos):
+    global saldo_min
+    if saldo_min > saldos:
+        saldo_min = saldos
+    return saldo_min
+
+def total_apuestas(apuestas):
+    global total_apostado
+    total_apostado += apuestas
+    return total_apostado
 
 # ================================================== [ EJECUCIÓN ] =================================================== #
 
-# PRUEBAS: RANDOM -------------------------------------------------------------------------------------------------
-
 def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
-    global saldo
+    global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
 
     """
     El argumento 'usar' indica el tipo de "módulo/estratégia" que será será usado.
@@ -84,29 +113,97 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
     if usar == 0:
         return
 
-    introducir_saldo_inicial(SALDO_INICIAL)
-    saldo = SALDO_INICIAL
+    nombre_modulo = f"Estrategias.estrategia_0{usar}"
+    estrategia = importlib.import_module(nombre_modulo)
 
-    nombre_modulo = f"Estrategias.estrategia_0{usar}"  # Se escoge la estrategia.
-    estrategia = importlib.import_module(nombre_modulo)  # Args del módulo: resultado, opciones_true, opciones_false
-
-    lista = generar_lista(OPCIONES_TRUE, OPCIONES_FALSE)  # Crea la lista para generar
-
-    ronda = rondas()  # Se inicia la primera ronda
+    print("====================================")
+    ronda = rondas()  # 1ª Ronda
+    print(f"Ronda Nº {ronda}")
+    saldo_min = SALDO_INICIAL  # Se traza el Saldo Inicial como valor incial
+    saldo_max = SALDO_INICIAL  # Se traza el Saldo Inicial como valor incial
+    print(f"Saldo inicial: {SALDO_INICIAL}")
+    apuesta = APUESTA_MINIMA
+    apuesta_max = APUESTA_MINIMA
+    total_apuestas(apuesta)
+    print(f"Cantidad a apostar: {apuesta}")
+    saldo_actual = SALDO_INICIAL - apuesta
+    saldo_actual = round(saldo_actual, 2)
+    print(f"Saldo actual: {saldo_actual}")
+    resultado = aleatorio(LISTA_OPCIONES)
+    print(f"Resultado: {resultado}")
+    if resultado is False:
+        premio = -apuesta
+        print(f"Premio: {premio}")
+    elif resultado is True:
+        premio = apuesta * MULTIPLICADOR
+        round(premio, 2)
+        print(f"Premio: {premio}")
+    saldo_actual += premio
+    saldo_actual = round(saldo_actual, 2)
+    saldo_minimo(saldo_actual)
+    print(f"Saldo actualizado: {saldo_actual}")
+    print("------------------------------")  # Fin de la 1ª Ronda.
 
     while ronda <= max_rondas:
 
-        resultado = aleatorio(lista)
-        apuesta = estrategia.calcular_apuesta(resultado, OPCIONES_TRUE, OPCIONES_FALSE)
-        saldo = obtener_saldo(saldo, apuesta, MULTIPLICADOR, resultado)
-
-        imprimir(SALDO_INICIAL, ronda, saldo, OPCIONES_TRUE, OPCIONES_FALSE, apuesta, resultado)
         ronda = rondas()
+        print(f"Ronda Nº {ronda}")
+        print(f"Saldo: {saldo_actual}")
 
-        if saldo < 100:
+        # Se introduce el resultado de la apuesta anterior para generar una nueva apuesta.
+        apuesta = estrategia.calcular_apuesta(resultado)
+        if apuesta > saldo_actual:
+            break
+        apuesta_max = apuesta_maxima(apuesta)
+        total_apuestas(apuesta)
+        print(f"Cantidad a apostar: {apuesta}")
+
+        saldo_actual -= apuesta
+        saldo_actual = round(saldo_actual, 2)
+        saldo_maximo(saldo_actual)
+        saldo_minimo(saldo_actual)
+        print(f"Saldo actual: {saldo_actual}")
+
+        # Se genera un nuevo resultado para la apuesta actual.
+        resultado = aleatorio(LISTA_OPCIONES)
+        print(f"Resultado: {resultado}")
+
+        if resultado is False:
+            premio = -apuesta
+            premio = round(premio, 2)
+            print(f"Premio: {premio}")
+        elif resultado is True:
+            premio = apuesta * MULTIPLICADOR
+            premio = round(premio, 2)
+            print(f"Premio: {premio}")
+
+        saldo_actual += premio
+        saldo_actual = round(saldo_actual, 2)
+        saldo_maximo(saldo_actual)
+        saldo_minimo(saldo_actual)
+
+        print(f"Saldo actualizado: {saldo_actual}")
+        print("------------------------------")
+
+    # Final de rondas · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
+
+        if (max_rondas == (ronda + 1)) or (saldo_actual < 5):
             break
 
+generar_prueba_random(8, 10000)
 
-generar_prueba_random(0, 1000)  # Pruebas en caso de usar el módulo 'GenerarBools'.
+beneficios = saldo_actual - SALDO_INICIAL
+
+print("=============================================")
+print("RESULTADO FINAL")
+print("···············")
+print(f"Apuesta Máxima: {apuesta_max}"
+      f"\nSaldo Máximo: {saldo_max}"
+      f"\nSaldo Mínimo: {saldo_min}"
+      f"\nBeneficio: {beneficios}"
+      f"\nTotal Apostado: {round(total_apostado, 2)}")
+
+devolucion = round((total_apostado * 0.05), 2)
+print(f"Devolución: {devolucion}")
 
 #

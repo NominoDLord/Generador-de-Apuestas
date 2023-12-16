@@ -9,7 +9,7 @@
 ########################################################################################################################
 
 """ ESTRATEGIA 01
-La apuesta se incrementa en cada repetición de fallo en relación al total de perdidas anteriores.
+Estrategia base que consiste simplemente en realizar siempre la misma apuesta con el mismo valor.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -25,31 +25,24 @@ sys.path.append(subDir2)
 
 from config.configuracion import *
 
-# ================================================== [ VARIABLES ] =================================================== #
-
-repeticiones = 0  # Inicialización del número de repeticiones.
-
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(resultados):
-    global repeticiones
-    repeticiones = 0 if resultados is True else repeticiones + 1
-    apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** repeticiones)
-    return round(apuesta, 2)
+    """El argumento 'resultados' no es necesario, pero se incluye porque en los otros métodos sí que se usa,
+    por lo que implicaría modificar la llamada a la función, pero de esta forma, se pueden seguir usando sin
+    ninguna modificación y sin provocar errores"""
+    apuesta = APUESTA_MINIMA
+    return apuesta
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
-
     ronda = 0
     while ronda < 9:
-
         ronda += 1
-        apuesta = calcular_apuesta(False)
-
-        print(f"Ronda {ronda}\nApuesta: {apuesta}\nResultado: {False}")
+        resultado = choice(LISTA_OPCIONES)
+        apuesta = calcular_apuesta(resultado)
+        print(f"Ronda {ronda}\nApuesta: {apuesta}\nResultado: {resultado}")
         print("--------------------")
-
     return None
-
 # prueba()

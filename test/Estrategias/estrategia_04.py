@@ -9,12 +9,7 @@
 ########################################################################################################################
 
 """ ESTRATEGIA 04
-El resultado de la apuesta se limita a la proporción de los últimos 100 resultados.
-- Hasta generar los primeros 100 resultados, la apuesta es siempre la misma (se establece un valor base).
-- Una vez generados los 100 resultados:
-    · Si el porcentaje de aciertos es igual, la apuesta es el valor base.
-    · Si el porcentaje de aciertos es superior, la apuesta es un valor inferior al valor base.
-    · Si el porcentaje de aciertos es inferior, la apuesta es un valor superior al valor base.
+Se especifica una apuesta en base al número de repeticiones fallidas.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -32,37 +27,54 @@ from config.configuracion import *
 
 # ================================================== [ VARIABLES ] =================================================== #
 
+repeticiones = 0
+
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(resultados):
+    global repeticiones
 
-    LISTA_RESULTADOS.append(resultados)
+    repeticiones = 0 if resultados is True else repeticiones + 1
 
-    apuesta = OPCIONES_TOTALES / 2
+    if repeticiones == 0:
+        return 1
 
-    if len(LISTA_RESULTADOS) > 100:
+    elif repeticiones == 1:
+        return 1
 
-        cnt_true = LISTA_RESULTADOS.count(True)
+    elif repeticiones == 2:
+        return 2
 
-        if cnt_true < PORCENTAJE_TRUE:
-            apuesta = OPCIONES_TRUE * 1
+    elif repeticiones == 3:
+        return 2
 
-        elif cnt_true > PORCENTAJE_TRUE:
-            apuesta = OPCIONES_FALSE * 1
+    elif repeticiones == 4:
+        return 5
 
-        else:
-            apuesta = OPCIONES_TOTALES / 2
+    elif repeticiones == 5:
+        return 10
 
-        del LISTA_RESULTADOS[0]
+    elif repeticiones == 6:
+        return 20
 
-    return round(apuesta, 2)
+    elif repeticiones == 7:
+        return 50
+
+    elif repeticiones == 8:
+        return 50
+
+    elif repeticiones == 9:
+        return 80
+
+    else:
+        return 99
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
     ronda = 0
-    while ronda < 1000:
+    while ronda < 50:
         ronda += 1
 
         resultado = choice(LISTA_OPCIONES)

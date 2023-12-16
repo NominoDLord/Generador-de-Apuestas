@@ -9,7 +9,10 @@
 ########################################################################################################################
 
 """ ESTRATEGIA 03
-Se especifica una apuesta en base al número de repeticiones fallidas.
+La apuesta se realiza en base a la proporción entre los aciertos y los fallos.
+- Se establece una apuesta base para las veces en el que la proporción es igual.
+- Se establece una apuesta superior a la apuesta base cuando la proporción es negativa.
+- Se establece una apuesta inferior a la apuesta base cuando la proporción es negativa.
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -25,56 +28,37 @@ sys.path.append(subDir2)
 
 from config.configuracion import *
 
+from random import choice
+
 # ================================================== [ VARIABLES ] =================================================== #
 
-repeticiones = 0
+cnt_resultados = 0  # Variable de inicialización
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(resultados):
-    global repeticiones
+    global cnt_resultados
 
-    repeticiones = 0 if resultados is True else repeticiones + 1
+    cnt_resultados = cnt_resultados + OPCIONES_FALSE if resultados is True else cnt_resultados - OPCIONES_TRUE
+    # print(cnt_resultados)
 
-    if repeticiones == 0:
-        return 1
+    if cnt_resultados > 0:
+        apuesta = OPCIONES_FALSE
 
-    elif repeticiones == 1:
-        return 1
-
-    elif repeticiones == 2:
-        return 2
-
-    elif repeticiones == 3:
-        return 2
-
-    elif repeticiones == 4:
-        return 5
-
-    elif repeticiones == 5:
-        return 10
-
-    elif repeticiones == 6:
-        return 20
-
-    elif repeticiones == 7:
-        return 50
-
-    elif repeticiones == 8:
-        return 50
-
-    elif repeticiones == 9:
-        return 80
+    elif cnt_resultados < 0:
+        apuesta = OPCIONES_TRUE
 
     else:
-        return 99
+        apuesta = (OPCIONES_TOTALES / 2)
+
+    return round(apuesta, 2)
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
     ronda = 0
-    while ronda < 50:
+    while ronda < 100:
         ronda += 1
 
         resultado = choice(LISTA_OPCIONES)

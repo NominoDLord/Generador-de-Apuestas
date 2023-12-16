@@ -66,23 +66,19 @@ from GenerarBools import generar_lista  # Args: trues, falses
 # ================================================== [ VARIABLES ] =================================================== #
 
 global saldo, saldo_max, saldo_min
+total_apostado = 0
 
-total_apostado = None
-
-# ================================================== [ EJECUCIÓN ] =================================================== #
+# ================================================== [ FUNCIONES ] =================================================== #
 
 apuesta_maxima = 0
 
 def apuesta_max(apuestas):
-
     global apuesta_maxima
-
     if apuesta_maxima < apuestas:
         apuesta_maxima = apuestas
-
     return apuesta_maxima
 
-# PRUEBAS: TEXTO --------------------------------------------------------------------------------------------------
+# ================================================== [ EJECUCIÓN ] =================================================== #
 
 def generar_prueba_texto(usar: int = 0):
     global saldo, saldo_max, saldo_min
@@ -120,7 +116,7 @@ def generar_prueba_texto(usar: int = 0):
         saldo_max, saldo_min = saldos_limite(saldo_actual)
         apuesta_max(apuesta)
 
-    # Final de ronda · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
+    # Final de rondas · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
 
         ronda = rondas()  # Cada vez que es llamada la función, la variable suma +1 a su valor.
 
@@ -133,6 +129,6 @@ def generar_prueba_texto(usar: int = 0):
     print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
     print(f"APUESTA MÁXIMA: {apuesta_maxima}")
 
-generar_prueba_texto(6)  # Pruebas en caso de usar el módulo 'LecturaTXT_Bools'
+generar_prueba_texto(0)  # Resultados[75-25](1); Total[75-25]
 
 #
