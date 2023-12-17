@@ -190,13 +190,13 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         if (max_rondas == (ronda + 1)) or (saldo_actual < 5):
             break
 
-generar_prueba_random(9, 10000)
+generar_prueba_random(9, 5000)
 
 beneficios = saldo_actual - SALDO_INICIAL
 
 print("=============================================")
 print("RESULTADO FINAL")
-print("···············")
+print("·····························")
 print(f"Apuesta Máxima: {apuesta_max}"
       f"\nSaldo Máximo: {saldo_max}"
       f"\nSaldo Mínimo: {saldo_min}"

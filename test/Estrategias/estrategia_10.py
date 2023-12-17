@@ -41,6 +41,5 @@ def simular_estrategia():
         print(f"{trues}|{falses}")
 
 
-
 # Llamamos a la función para simular la estrategia
 simular_estrategia()
