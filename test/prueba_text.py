@@ -92,7 +92,7 @@ def generar_prueba_texto(usar: int = 0):
     if usar == 0:
         return
 
-    nombre_modulo = f"Estrategias.estrategia_0{usar}"
+    nombre_modulo = f"Estrategias.estrategia_{usar}"
     estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
 
     Nombre_Archivo = input("Nombre del archivo: ")  # Resultados[75-25](1); Total[75-25]
@@ -128,6 +128,7 @@ def generar_prueba_texto(usar: int = 0):
 
     print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
     print(f"APUESTA MÁXIMA: {apuesta_maxima}")
+
 
 generar_prueba_texto(9)  # Resultados[75-25](1); Total[75-25]
 

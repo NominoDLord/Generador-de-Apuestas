@@ -64,8 +64,14 @@ Porcentaje [True | False]:<br>
 73.56 | 26.44
 `
 
-max_true: `82`		<br>
-max_false: `37`
+`max_true` : `82`		<br>
+`min_true` : `63`		<br>
 
-min_true: `63`		<br>
-min_false: `18`
+`max_false` : `37`		<br>
+`min_false` : `18`		<br>
+
+
+| % |True|False|
+|---|----|-----|
+|Max| 82 | 37  |
+|Min| 63 | 18  |

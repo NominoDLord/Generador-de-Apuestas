@@ -37,9 +37,9 @@ def calcular_apuesta(saldos):
     global apuesta, saldo_objetivo, contar, saldo_base
 
     # print("·····································")
-    # print(f"Contar: {contar}")
-    # print(f"Saldo Base: {saldo_base}")
-    # print(f"Saldo Objetivo: {saldo_objetivo}")
+    # print(f"> Contar: {contar}")
+    # print(f"> Saldo Base: {saldo_base}")
+    # print(f"> Saldo Objetivo: {saldo_objetivo}")
     # print("·····································")
 
     if saldos > saldo_objetivo:  # Una vez llegado al saldo objetivo...
