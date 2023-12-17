@@ -48,6 +48,8 @@ def calcular_apuesta(resultados):
     # ········································································································
     anterior_posicion = repeticion_guardada[0]
 
+    print(lista_posiciones)
+
     if repeticion == 0:
 
         if (anterior_posicion - 1) == -1:  # Esto es en caso de que se repitan 2 (o más) resultados 'True' seguidos.
@@ -67,41 +69,25 @@ def calcular_apuesta(resultados):
 
 
     elif repeticion == 1:
-
-        if lista_posiciones[repeticion - 1] > 4:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
-        else:
-            # Esto evaluará las veces que se han fallado en esta posición y se incrementará la apuesta en base a ello.
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
-            # Esto incrementará en 1 la posición en caso de que el siguiente resultado sea 'False'.
-            lista_posiciones[repeticion - 1] += 1
+        # Esto evaluará las veces que se han fallado en esta posición y se incrementará la apuesta en base a ello.
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+        # Esto incrementará en 1 la posición en caso de que el siguiente resultado sea 'False'.
+        lista_posiciones[repeticion - 1] += 1
 
 
     elif repeticion == 2:
-
-        if lista_posiciones[repeticion - 1] > 4:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
-        else:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
-            lista_posiciones[repeticion - 1] += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+        lista_posiciones[repeticion - 1] += 1
 
 
     elif repeticion == 3:
-
-        if lista_posiciones[repeticion - 1] > 4:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
-        else:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
-            lista_posiciones[repeticion - 1] += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+        lista_posiciones[repeticion - 1] += 1
 
 
     elif repeticion == 4:
-
-        if lista_posiciones[repeticion - 1] > 4:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** 5)
-        else:
-            apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
-            lista_posiciones[repeticion - 1] += 1
+        apuesta = APUESTA_MINIMA * (OPCIONES_TRUE ** lista_posiciones[repeticion - 1])
+        lista_posiciones[repeticion - 1] += 1
 
     elif repeticion == 5:
         apuesta = 99

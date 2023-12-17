@@ -151,7 +151,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         print(f"Saldo: {saldo_actual}")
 
         # Se introduce el resultado de la apuesta anterior para generar una nueva apuesta.
-        apuesta = estrategia.calcular_apuesta(resultado)
+        apuesta = estrategia.calcular_apuesta(saldo_actual)
         if apuesta > saldo_actual:
             break
         apuesta_max = apuesta_maxima(apuesta)
@@ -187,10 +187,10 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
 
     # Final de rondas · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
 
-        if (max_rondas == (ronda + 1)) or (saldo_actual < 5):
+        if (max_rondas == ronda) or (saldo_actual < 5):
             break
 
-generar_prueba_random(9, 10000)
+generar_prueba_random(9, 100000)
 
 beneficios = saldo_actual - SALDO_INICIAL
 
@@ -200,7 +200,7 @@ print("···············")
 print(f"Apuesta Máxima: {apuesta_max}"
       f"\nSaldo Máximo: {saldo_max}"
       f"\nSaldo Mínimo: {saldo_min}"
-      f"\nBeneficio: {beneficios}"
+      f"\nBeneficio: {round(beneficios, 2)}"
       f"\nTotal Apostado: {round(total_apostado, 2)}")
 
 devolucion = round((total_apostado * 0.05), 2)
