@@ -1,16 +1,13 @@
-mi_lista = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-mi_lista[0] += 1
-print(mi_lista)
-mi_lista[0] += 1
-print(mi_lista)
-mi_lista[0] = 8
-print(mi_lista)
-incremento = mi_lista[0]
-
-print(incremento * 2)
-
-del mi_lista[0]
-print(mi_lista)
-mi_lista.pop()
-print(mi_lista)
+# import markdown
+#
+# texto_markdown = """
+# # Título
+# Párrafo con **negrita**.
+# Párrafo con *cursiva*.
+# ## Título de Lista
+# - Lista 1
+# - Lista 2
+# - Lista 3
+# """
+# convertir_a_html = markdown.markdown(texto_markdown)
+# print(convertir_a_html)

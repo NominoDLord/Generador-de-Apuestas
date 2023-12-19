@@ -1,45 +1,80 @@
-import random
+########################################################################################################################
+##                                                                                                                    ##
+##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ##      #####   #####   #####         ##
+##       ###  ##  ##   ##  ###  ###    ##    ###  ##  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
+##       ## # ##  ##   ##  ## ## ##    ##    ## # ##  ##   ##      ##   ##      ##     ##   ##  #####   ##   ##       ##
+##       ##  ###  ##   ##  ##    ##    ##    ##  ###  ##   ##      ##   ##      ##     ##   ##  ##  ##  ##   ##       ##
+##       ##   ##   #####   ##    ##  ######  ##   ##   #####       #####        ######  #####   ##  ##  #####         ##
+##                                                                                                                    ##
+########################################################################################################################
 
-contar_true, contar_false = 0, 0
+""" ESTRATEGIA 11
+"""
 
-def estrategia_apuesta(puntos, apuesta_actual):
-    # Genera un resultado aleatorio (True para acierto, False para fallo)
-    global contar_true, contar_false
-    resultado = random.choice([True, False])
+# ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
 
-    # Aplica la estrategia de apuesta
-    if puntos > 1000:
-        apuesta_actual = 5
-    elif resultado:
-        apuesta_actual = min(20, apuesta_actual * 2)
+import sys
+import os
+
+subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+subDir2 = os.path.abspath(os.path.join(subDir1, '..'))
+
+sys.path.append(subDir1)
+sys.path.append(subDir2)
+
+from config.configuracion import *
+
+# ================================================== [ VARIABLES ] =================================================== #
+
+global apuesta
+lista = []
+saldo_objetivo = SALDO_INICIAL
+# ================================================== [ FUNCIONES ] =================================================== #
+
+def calcular_apuesta(saldos, resultados, apuestas):
+    global lista, apuesta, saldo_objetivo
+
+    if resultados is None:
+        # Esto es solo para la resolución de la primera apuesta.
+        apuesta = 1
+
     else:
-        apuesta_actual = 10
+        lista.append(resultados)
 
-    # Actualiza los puntos según el resultado y la apuesta actual
-    if resultado:
-        puntos += apuesta_actual
-    else:
-        puntos -= apuesta_actual
+        if len(lista) < 6:
+            falses = lista.count(False)
+            apuesta = min(99, apuestas * (OPCIONES_TRUE ** falses))
 
-    if resultado is True:
-        contar_true += 1
-    if resultado is False:
-        contar_false += 1
+        else:
+            del lista[0]
+            print(lista)
+            i = 1.25 if (saldos < saldo_objetivo) else 0.75
 
-    return puntos, apuesta_actual, resultado, contar_true, contar_false
+            # if saldos > saldo_objetivo:
+            #     saldo_objetivo += 0.1
 
-def simular_estrategia():
-    puntos = 1000
-    apuesta_actual = 10
-    resultados = []
+            falses = lista.count(False)
+            apuesta = min(APUESTA_MAXIMA, (APUESTA_MINIMA * (OPCIONES_TRUE ** falses)) * i)
 
-    while True:
-        puntos, apuesta_actual, resultado, trues, falses = estrategia_apuesta(puntos, apuesta_actual)
-        resultados.append(resultado)
+            if apuesta < APUESTA_MINIMA:
+                apuesta = APUESTA_MINIMA
 
-        print(f'Puntos: {puntos}, Apuesta actual: {apuesta_actual}, Último resultado: {resultado}')
-        print(f"{trues}|{falses}")
+            # if resultados is False and saldos > SALDO_INICIAL:
+            #     apuesta = min(99, apuestas * 3)
+            #
+            # if saldos > SALDO_INICIAL:
+            #     apuesta = 0.3
+            # elif resultados is False:
+            #     apuesta = min(99, apuestas * 3)
+            # else:
+            #     apuesta = 0.9
 
+    return round(apuesta, 2)
 
-# Llamamos a la función para simular la estrategia
-simular_estrategia()
+# ===================================================== [ TEST ] ===================================================== #
+
+def prueba():
+
+    return None
+
+# prueba()

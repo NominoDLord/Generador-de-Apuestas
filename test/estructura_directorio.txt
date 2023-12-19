@@ -1,0 +1,19 @@
+NominoDLord.github.io
+README.md
+index.html
+|-- styles.css
+\ > about/
+\ > blog/
+\ > contact/
+\ > docs/
+|   \ > dev/
+|   |-- MarkDown.html
+\ > profile/
+\ > Logo/
+|   |-- Logo[main].png
+|   |-- Logo_Nomino-D-Lord_36px [basic_black].png
+|   |-- Logo_Nomino-D-Lord_36px [basic_white].png
+|-- Cloud_Service.txt
+|-- help.txt
+|-- main_test.html
+|-- styles_test.css

@@ -14,7 +14,7 @@
 
     Código para ejecutar las estratégias definidas en:
 
-        .../Estrategias/estrategia_00.py
+        .../Estrategias/estrategia_0.py
 
     Para poder ejecutar las estratégias, necesitaremos generar los siguientes resultados:
 
@@ -39,7 +39,6 @@
             el número de opciones que hay de acertar y fallar.
 
             Usando este módulo junto con un bucle (while), podemos generar tantos resultados aleatorios como queramos.
-
 """
 
 # ============================================ [ BIBLIOTECAS & MÓDULOS ] ============================================= #
@@ -61,15 +60,15 @@ from ImprimirDatos import imprimir
 from ActualizarSaldo import obtener_saldo
 from Saldos import saldos_limite
 
+from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo (El archivo debe estar dentro de la carpeta `Registros`)
 from GenerarBools import generar_lista  # Args: trues, falses
-from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo
-# El archivo debe estar dentro de la carpeta 'Registros'
 
 # ================================================== [ VARIABLES ] =================================================== #
 
-global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
+global saldo, premio, saldo_max, saldo_min, saldo_actual
+apuesta_max = 0
 total_apostado = 0
-
+lista_apuestas = []
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def apuesta_maxima(apuestas):
@@ -97,12 +96,10 @@ def total_apuestas(apuestas):
 
 # ================================================== [ EJECUCIÓN ] =================================================== #
 
-def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
+def generar_prueba_texto(usar: int = 0):
     global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
-
     """
-    El argumento 'usar' indica el tipo de "módulo/estratégia" que será será usado.
-    Este módulo estará contenido en el directorio "Estrategias".
+    Para 'usar' correctamente la función, se deberá establecer el número que corresponde al módulo que se quiere usar.
 
     @param usar: Esta variable define el módulo de la estrategia a importar.
     @return: En caso de que `usar` sea 0, la función no será usada.
@@ -111,97 +108,54 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
     if usar == 0:
         return
 
-    nombre_modulo = f"Estrategias.estrategia_0{usar}"
-    estrategia = importlib.import_module(nombre_modulo)
+    nombre_modulo = f"Estrategias.estrategia_{usar}"
+    estrategia = importlib.import_module(nombre_modulo)  # Args: resultado, opciones_true, opciones_false
 
-    print("====================================")
-    ronda = rondas()  # 1ª Ronda
-    print(f"Ronda Nº {ronda}")
-    saldo_min = SALDO_INICIAL  # Se traza el Saldo Inicial como valor incial
-    saldo_max = SALDO_INICIAL  # Se traza el Saldo Inicial como valor incial
-    print(f"Saldo inicial: {SALDO_INICIAL}")
-    apuesta = APUESTA_MINIMA
-    apuesta_max = APUESTA_MINIMA
-    total_apuestas(apuesta)
-    print(f"Cantidad a apostar: {apuesta}")
+    Nombre_Archivo = input("Nombre del archivo: ")  # Resultados[75-25](1); Total[75-25]
+    resultados = leer_bools(f"{Nombre_Archivo}.txt")  # Se crea una lista con los resultados obtenidos del archivo.
+    total_rondas = len(resultados)
+
+    ronda = rondas()  # Se inicia la secuencia de rondas.
+    resultado = None  # Se establece "None" como valor porque aún no hay ningún resultado generado.
+
+    apuesta_anterior = 0  # Como no hay apuesta anterior, el valor es 0.
+    lista_apuestas.append(apuesta_anterior)  # Se añade la apuesta a la lista.
+    saldo_actual = SALDO_INICIAL
+
+    apuesta = estrategia.calcular_apuesta(saldo_actual, resultado, apuesta_anterior)  # Se genera la primera apuesta.
     saldo_actual = SALDO_INICIAL - apuesta
-    saldo_actual = round(saldo_actual, 2)
-    print(f"Saldo actual: {saldo_actual}")
-    resultado = aleatorio(LISTA_OPCIONES)
-    print(f"Resultado: {resultado}")
-    if resultado is False:
-        premio = -apuesta
-        print(f"Premio: {premio}")
-    elif resultado is True:
-        premio = apuesta * MULTIPLICADOR
-        round(premio, 2)
-        print(f"Premio: {premio}")
-    saldo_actual += premio
-    saldo_actual = round(saldo_actual, 2)
-    saldo_minimo(saldo_actual)
-    print(f"Saldo actualizado: {saldo_actual}")
-    print("------------------------------")  # Fin de la 1ª Ronda.
 
-    while ronda <= max_rondas:
+    for resultado in resultados:
 
-        ronda = rondas()
-        print(f"Ronda Nº {ronda}")
-        print(f"Saldo: {saldo_actual}")
+        lista_apuestas.append(apuesta)  # Se añade la nueva apuesta generada...
+        del lista_apuestas[0]  # y se elimina la apuesta anterior.
 
-        # Se introduce el resultado de la apuesta anterior para generar una nueva apuesta.
-        apuesta = estrategia.calcular_apuesta(resultado)
-        if apuesta > saldo_actual:
-            break
-        apuesta_max = apuesta_maxima(apuesta)
-        total_apuestas(apuesta)
-        print(f"Cantidad a apostar: {apuesta}")
-
-        saldo_actual -= apuesta
-        saldo_actual = round(saldo_actual, 2)
-        saldo_maximo(saldo_actual)
-        saldo_minimo(saldo_actual)
-        print(f"Saldo actual: {saldo_actual}")
-
-        # Se genera un nuevo resultado para la apuesta actual.
-        resultado = aleatorio(LISTA_OPCIONES)
-        print(f"Resultado: {resultado}")
-
-        if resultado is False:
-            premio = 0
-            premio = round(premio, 2)
-            print(f"Premio: {premio}")
-        elif resultado is True:
-            premio = apuesta * MULTIPLICADOR
-            premio = round(premio, 2)
-            print(f"Premio: {premio}")
+        premio = apuesta * MULTIPLICADOR if resultado is True else 0
 
         saldo_actual += premio
         saldo_actual = round(saldo_actual, 2)
-        saldo_maximo(saldo_actual)
-        saldo_minimo(saldo_actual)
 
-        print(f"Saldo actualizado: {saldo_actual}")
-        print("------------------------------")
+        imprimir(ronda, saldo_actual, apuesta, resultado)
+
+        saldo_max, saldo_min = saldos_limite(saldo_actual)
+        apuesta_max = apuesta_maxima(apuesta)
 
     # Final de rondas · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·
 
-        if (max_rondas == (ronda + 1)) or (saldo_actual < 5):
+        ronda = rondas()  # Cada vez que es llamada la función, la variable suma +1 a su valor.
+
+        if (total_rondas == (ronda + 1)) or (saldo_actual < 5):
             break
 
-generar_prueba_random(9, 5000)
+        apuesta_anterior = lista_apuestas[0]
+        apuesta = estrategia.calcular_apuesta(saldo_actual, resultado, apuesta_anterior)
+        saldo_actual -= apuesta
 
-beneficios = saldo_actual - SALDO_INICIAL
+    print("==================================================")
+    print(f"SALDO [Max|Min]: {saldo_max} | {saldo_min}")
+    print(f"APUESTA MÁXIMA: {apuesta_max}")
+    print("==================================================")
 
-print("=============================================")
-print("RESULTADO FINAL")
-print("·····························")
-print(f"Apuesta Máxima: {apuesta_max}"
-      f"\nSaldo Máximo: {saldo_max}"
-      f"\nSaldo Mínimo: {saldo_min}"
-      f"\nBeneficio: {beneficios}"
-      f"\nTotal Apostado: {round(total_apostado, 2)}")
-
-devolucion = round((total_apostado * 0.05), 2)
-print(f"Devolución: {devolucion}")
+generar_prueba_texto(10)  # Resultados[75-25](1); Total[75-25]
 
 #

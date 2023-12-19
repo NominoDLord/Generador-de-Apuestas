@@ -48,6 +48,7 @@ import os
 
 subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(subDir1)
+
 from config.configuracion import *
 
 import importlib
