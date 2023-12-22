@@ -73,7 +73,6 @@ total_apostado = 0
 # ================================================== [ FUNCIONES ] =================================================== #
 
 
-
 def apuesta_maxima(apuestas):
     global apuesta_max
     if apuesta_max < apuestas:

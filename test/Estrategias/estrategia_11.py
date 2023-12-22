@@ -27,53 +27,55 @@ from config.configuracion import *
 # ================================================== [ VARIABLES ] =================================================== #
 
 global apuesta
-lista = []
 saldo_objetivo = SALDO_INICIAL
+
 # ================================================== [ FUNCIONES ] =================================================== #
 
-def calcular_apuesta(saldos, resultados, apuestas):
-    global lista, apuesta, saldo_objetivo
+def calcular_apuesta(saldos):
+    global apuesta, saldo_objetivo
 
-    if resultados is None:
-        # Esto es solo para la resolución de la primera apuesta.
-        apuesta = 1
+    # Saldos Negativos · · · · · · · · · · · · · · · · · · · · · ·
 
-    else:
-        lista.append(resultados)
+    if saldo_objetivo > saldos:
+        apuesta = APUESTA_MINIMA * (2 ** 3)
 
-        if len(lista) < 6:
-            falses = lista.count(False)
-            apuesta = min(99, apuestas * (OPCIONES_TRUE ** falses))
+        if (saldo_objetivo - 20) >= saldos:
+            apuesta = APUESTA_MINIMA * (2 ** 4)
 
-        else:
-            del lista[0]
-            print(lista)
-            i = 1.25 if (saldos < saldo_objetivo) else 0.75
+            if (saldo_objetivo - 50) >= saldos:
+                apuesta = APUESTA_MINIMA * (2 ** 5)
 
-            # if saldos > saldo_objetivo:
-            #     saldo_objetivo += 0.1
+    # Saldos Positivos · · · · · · · · · · · · · · · · · · · · · ·
 
-            falses = lista.count(False)
-            apuesta = min(APUESTA_MAXIMA, (APUESTA_MINIMA * (OPCIONES_TRUE ** falses)) * i)
+    elif saldo_objetivo <= saldos:
+        apuesta = APUESTA_MINIMA * (2 ** 2)
 
-            if apuesta < APUESTA_MINIMA:
-                apuesta = APUESTA_MINIMA
+        if (saldo_objetivo + 20) < saldos:
+            apuesta = APUESTA_MINIMA * (2 ** 1)
 
-            # if resultados is False and saldos > SALDO_INICIAL:
-            #     apuesta = min(99, apuestas * 3)
-            #
-            # if saldos > SALDO_INICIAL:
-            #     apuesta = 0.3
-            # elif resultados is False:
-            #     apuesta = min(99, apuestas * 3)
-            # else:
-            #     apuesta = 0.9
+            if (saldo_objetivo + 30) < saldos:
+                apuesta = APUESTA_MINIMA * (2 ** 0)
+
+    # Actualizar Saldo Objetivo  · · · · · · · · · · · · · · · · ·
+
+    if (saldo_objetivo + 50) < saldos:
+        saldo_objetivo += 50
+        nivel = 1
+
+    if nivel == 1:
+
+        if (saldo_objetivo - 100) > saldos:
+            saldo_objetivo -= 100
+            nivel = 0
 
     return round(apuesta, 2)
+
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
+
+
 
     return None
 

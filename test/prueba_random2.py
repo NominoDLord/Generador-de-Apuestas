@@ -68,11 +68,17 @@ from LecturaTXT_Bools import leer_bools  # Arg: Nombre_Archivo
 # ================================================== [ VARIABLES ] =================================================== #
 
 global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
-total_apostado = 0
+total_apostado, trues, falses = 0, 0, 0
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
-
+def contar_resultados(resultados):
+    global trues, falses
+    if resultados is True:
+        trues += 1
+    elif resultados is False:
+        falses += 1
+    return trues, falses
 
 def apuesta_maxima(apuestas):
     global apuesta_max
@@ -100,7 +106,7 @@ def total_apuestas(apuestas):
 # ================================================== [ EJECUCIÓN ] =================================================== #
 
 def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
-    global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual
+    global saldo, premio, apuesta_max, saldo_max, saldo_min, saldo_actual, trues, falses
 
     """
     El argumento 'usar' indica el tipo de "módulo/estratégia" que será será usado.
@@ -113,7 +119,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
     if usar == 0:
         return
 
-    nombre_modulo = f"Estrategias.estrategia_0{usar}"
+    nombre_modulo = f"Estrategias.estrategia_{usar}"
     estrategia = importlib.import_module(nombre_modulo)
 
     print("====================================")
@@ -131,6 +137,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
     print(f"Saldo actual: {saldo_actual}")
     resultado = aleatorio(LISTA_OPCIONES)
     print(f"Resultado: {resultado}")
+    contar_resultados(resultado)
     if resultado is False:
         premio = -apuesta
         print(f"Premio: {premio}")
@@ -166,6 +173,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
 
         # Se genera un nuevo resultado para la apuesta actual.
         resultado = aleatorio(LISTA_OPCIONES)
+        trues, falses = contar_resultados(resultado)
         print(f"Resultado: {resultado}")
 
         if resultado is False:
@@ -190,7 +198,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         if (max_rondas == ronda) or (saldo_actual < 5):
             break
 
-generar_prueba_random(9, 100000)
+generar_prueba_random(11, 10000)
 
 beneficios = saldo_actual - SALDO_INICIAL
 
@@ -201,7 +209,8 @@ print(f"Apuesta Máxima: {apuesta_max}"
       f"\nSaldo Máximo: {saldo_max}"
       f"\nSaldo Mínimo: {saldo_min}"
       f"\nBeneficio: {round(beneficios, 2)}"
-      f"\nTotal Apostado: {round(total_apostado, 2)}")
+      f"\nTotal Apostado: {round(total_apostado, 2)}"
+      f"\nTrues | Falses: {trues} | {falses}")
 
 devolucion = round((total_apostado * 0.05), 2)
 print(f"Devolución: {devolucion}")

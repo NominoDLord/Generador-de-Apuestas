@@ -24,9 +24,9 @@ SALDO_INICIAL = 1000
 
 APUESTA_MINIMA = 0.30
 APUESTA_MAXIMA = 99.00
-MULTIPLICADOR = 1.32
+MULTIPLICADOR = 2
 
-OPCIONES_TRUE = 3
+OPCIONES_TRUE = 1
 OPCIONES_FALSE = 1
 
 # ···············································  VALORES  GENERADOS  ··············································· #
