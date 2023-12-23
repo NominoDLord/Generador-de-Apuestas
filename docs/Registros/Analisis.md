@@ -71,7 +71,7 @@ Porcentaje [True | False]:<br>
 `min_false` : `18`		<br>
 
 
-| % |True|False|
-|---|----|-----|
-|Max| 82 | 37  |
-|Min| 63 | 18  |
+|  %  | True | False |
+|-----|------|-------|
+| Max |  82  |   37  |
+| Min |  63  |   18  |

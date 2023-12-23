@@ -72,10 +72,18 @@ El resultado de la apuesta se limita a la proporción de los últimos 100 result
 
 ## Estrategia 07
 
-Esta estrategia consiste en tomar como referencia las repeticiones como referencia.<br>
-Cada repetición es una posición, en caso de fallar, la posición suma +1.<br>
-Esto hará que la apuesta se incremente proporcionalmente dependiendo de los fallos en la posición determinada.<br>
-En el caso de acertar, la posición se reinicia a su valor inicial (0).
+Esta estrategia consiste en tomar como referencia el número de repeticiones de un mismo resultado.<br>
+El número de repeticiones establece la posición en la lista de repeticiones.<br>
+
+El valor de una posición estará determinado por el resultado obtenido en la siguiente apuesta:
+- En caso de que el resultado sea True, la posición tomará el valor de 0.
+- En caso de que el resultado sea False, la posición incrementará su valor en +1.
+
+
+El valor de una apuesta vendrá determinado por el valor existente en una posición.
+- En caso de que el valor sea igual a 0, la apuesta resultante será el valor mínimo establecido.
+- En caso de que el valor sea superior a 0, la apuesta resultante será el valor mínimo establecido multiplicado por el valor de la posición.
+
 
 
 ## Estrategia 08

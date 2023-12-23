@@ -16,7 +16,7 @@
 
         .../Estrategias/estrategia_00.py
 
-    Para poder ejecutar las estratégias, necesitaremos generar los siguientes resultados:
+    Para poder ejecutar las estrategias, necesitaremos generar los siguientes resultados:
 
         > True      (Para los aciertos)
         > False     (Para los fallos)

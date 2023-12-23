@@ -72,7 +72,7 @@ def calcular_apuesta(resultados):
             del repeticion_guardada[0]
             return round(apuesta, 2)
 
-        # En caso de que el últmo reultado haya sido un 'False'...
+        # En caso de que el último resultado haya sido un 'False'...
         lista_posiciones[anterior_posicion - 1] = -1  # ... esto reiniciará el contador de la posición repetida.
         del repeticion_guardada[0]
         return round(apuesta, 2)
