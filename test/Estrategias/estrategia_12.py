@@ -28,28 +28,48 @@ from ContarRepeticiones import contar_posicion
 
 # ================================================== [ VARIABLES ] =================================================== #
 
+global apuesta
+
 saldo_objetivo = SALDO_INICIAL
+contar_trues = 0
+contar_falses = 0
+repeticion = 0
 
 # ================================================== [ FUNCIONES ] =================================================== #
 
 def calcular_apuesta(resultados, saldos):
+    global saldo_objetivo, repeticion, contar_trues, contar_falses, apuesta
 
-    apuesta_nivel_1 = 0
+    """ CONTABILIZAR DATOS:  -------------------------------------------------------------------------------------
+
+        Se contabilizan los datos antes de realizar los cálculos de las apuestas en los distintos niveles.
+    """
+
+    apuesta_nivel_1, apuesta_nivel_2, apuesta_nivel_3 = 0, 0, 0
 
     LISTA_RESULTADOS.append(resultados)  # Se añade el resultado (bool) a la lista.
 
     repeticion = 0 if resultados is True else repeticion + 1
+
+
+    if resultados is True:
+        contar_trues += 1
+
+    else:
+        contar_falses += 2.75
+
 
     """ NIVEL 0:  ------------------------------------------------------------------------------------------------
     
         Excepción en caso de un número de repeticiones excesivas.
     """
 
-    if repeticion <= 6:
+    if repeticion >= 6:
 
         apuesta = APUESTA_MAXIMA
         return apuesta
 
+    # En caso de que se "active" este nivel, no se procederá a analizar ningún dato más.
 
     """ NIVEL 1:  ------------------------------------------------------------------------------------------------
 
@@ -59,7 +79,7 @@ def calcular_apuesta(resultados, saldos):
         la apuesta resultante se incrementará en función de la diferencia entre estos dos valores.
     """
 
-    if repeticion <= 2:
+    if repeticion >= 2:
 
         # Se toman las longitudes de la lista de porcentajes para crear la lista de posiciones.
         longitud_trues, longitud_falses = len(LISTA_PORCENTAJES_TRUE), len(LISTA_PORCENTAJES_FALSE)
@@ -94,10 +114,9 @@ def calcular_apuesta(resultados, saldos):
             apuesta_nivel_1 = APUESTA_MINIMA
 
 
-
     """ NIVEL 2:  ------------------------------------------------------------------------------------------------
     
-        En caso de que se llege a un número de repeticiones excesivas, la apuesta a devolver será el valor máximo.
+        ---
     """
 
     if saldos < saldo_objetivo:
@@ -105,42 +124,87 @@ def calcular_apuesta(resultados, saldos):
         diferencia_saldos = saldo_objetivo - saldos
         apuesta_base = APUESTA_MINIMA
         lista_partes = []
+        exponente = 0
         suma = 0
 
-        while diferencia_saldos > suma:
+        while suma < diferencia_saldos:
 
-            lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 0))
-            lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 1))
-            lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 2))
-            lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 3))
-            lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 4))
+            while exponente <= 5:
+                valor = apuesta_base * ((OPCIONES_TOTALES / 2) ** exponente)
+                lista_partes.append(round(valor, 2))
+                exponente += 1
 
-            suma = sum(lista_partes)
+            suma = round(sum(lista_partes), 2)
 
-            if diferencia_saldos < suma:
-                apuesta_base += 0.1
+            if suma < diferencia_saldos:
+                apuesta_base += 0.03
                 lista_partes = []
+                exponente = 0
+
+        apuesta_nivel_2 = lista_partes[repeticion]
+
+
+    """ NIVEL 3:  ------------------------------------------------------------------------------------------------
+
+        ---
+    """
+
+    if len(LISTA_RESULTADOS) > 99:
+
+        diferencia_proporcional = contar_trues - contar_falses
+
+        if diferencia_proporcional < 0:
+
+            nivel_3 = abs(diferencia_proporcional)
+            apuesta_nivel_3 = nivel_3 * (APUESTA_MINIMA * OPCIONES_TRUE)
+
+        else:
+
+            nivel_3 = 1 / diferencia_proporcional
+            apuesta_nivel_3 = nivel_3 * (APUESTA_MINIMA * OPCIONES_TRUE)
 
 
 
+    """ EVALUACIÓN DE BENEFICIO:  --------------------------------------------------------------------------------
+
+        Actualización del Saldo Objetivo.
+    """
+
+    if saldos > (saldo_objetivo + 100):
+        saldo_objetivo += 50
 
 
-    """ NIVEL DE RECUENTO:
+    """ RECUENTO:  -----------------------------------------------------------------------------------------------
+    
         Se suman las apuestas generadas en todos los niveles para determinar el resultado final de la apuesta.
     """
 
+    recuento_apuestas = apuesta_nivel_1 + apuesta_nivel_2 + apuesta_nivel_3
+
+    if recuento_apuestas <= APUESTA_MINIMA:
+        apuesta = APUESTA_MINIMA
+
+    elif (recuento_apuestas >= APUESTA_MAXIMA) and repeticion == 4:
+        apuesta = APUESTA_MAXIMA * 0.9
+
+    elif (recuento_apuestas >= APUESTA_MAXIMA) and repeticion == 3:
+        apuesta = APUESTA_MAXIMA * 0.8
+
+    elif (recuento_apuestas >= APUESTA_MAXIMA) and repeticion == 2:
+        apuesta = APUESTA_MAXIMA * 0.7
+
+    elif (recuento_apuestas >= APUESTA_MAXIMA) and repeticion == 1:
+        apuesta = APUESTA_MAXIMA * 0.6
 
 
-    apuesta = apuesta_nivel_1
-
-    return None
+    return round(apuesta, 2)
 
 
 # ===================================================== [ TEST ] ===================================================== #
 
 def prueba():
 
-    ronda, rondas = 0, 30
+    ronda, rondas = 0, 1000
 
     while ronda < rondas:
 
@@ -148,8 +212,8 @@ def prueba():
 
         resultado = choice(LISTA_OPCIONES)
         print(resultado)
-        calcular_apuesta(resultado)
-
+        apuestas = calcular_apuesta(resultado, 1000)  # TODO
+        print(apuestas)
 
     return None
 

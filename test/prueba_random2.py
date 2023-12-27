@@ -49,7 +49,7 @@ import os
 
 subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(subDir1)
-from config.configuracion import *
+from config.setup import *
 
 import importlib
 from random import choice as aleatorio
@@ -142,7 +142,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         premio = -apuesta
         print(f"Premio: {premio}")
     elif resultado is True:
-        premio = apuesta * MULTIPLICADOR
+        premio = round((apuesta * MULTIPLICADOR), 2)
         round(premio, 2)
         print(f"Premio: {premio}")
     saldo_actual += premio
@@ -158,7 +158,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         print(f"Saldo: {saldo_actual}")
 
         # Se introduce el resultado de la apuesta anterior para generar una nueva apuesta.
-        apuesta = estrategia.calcular_apuesta(saldo_actual)
+        apuesta = estrategia.calcular_apuesta(resultado, saldo_actual)
         if apuesta > saldo_actual:
             break
         apuesta_max = apuesta_maxima(apuesta)
@@ -198,7 +198,7 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         if (max_rondas == ronda) or (saldo_actual < 5):
             break
 
-generar_prueba_random(11, 10000)
+generar_prueba_random(13, 10000)
 
 beneficios = saldo_actual - SALDO_INICIAL
 

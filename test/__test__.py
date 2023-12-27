@@ -1,34 +1,95 @@
-# import markdown
-#
-# texto_markdown = """
-# # Título
-# Párrafo con **negrita**.
-# Párrafo con *cursiva*.
-# ## Título de Lista
-# - Lista 1
-# - Lista 2
-# - Lista 3
-# """
-# convertir_a_html = markdown.markdown(texto_markdown)
-# print(convertir_a_html)
+from random import choice
 
-if saldos < saldo_objetivo:
+lista = [True, False]
 
-    diferencia_saldos = saldo_objetivo - saldos
-    apuesta_base = APUESTA_MINIMA
-    lista_partes = []
-    suma = 0
+saldo_inicial = 1000
+saldos = saldo_inicial
+multiplicador = 2
 
-    while diferencia_saldos > suma:
+repeticion_true = 0
+repeticion_false = 0
 
-        lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 0))
-        lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 1))
-        lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 2))
-        lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 3))
-        lista_partes.append(apuesta_base * (OPCIONES_TRUE ** 4))
+posiciones_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+fallos_posicion_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+lista_perdidas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-        suma = sum(lista_partes)
+repeticion_max_false = 0
 
-        if diferencia_saldos < suma:
-            apuesta_base += 0.1
-            lista_partes = []
+rondas = 100000
+ronda = 0
+minimo = 0.3
+
+apuesta = None
+resultado = None
+beneficios = None
+perdidas = None
+
+while rondas != ronda:
+    ronda += 1
+
+    if resultado is None:
+        apuesta = 0.3
+
+    else:
+
+        if perdidas > 0:
+
+            longitud_lista = len(fallos_posicion_false)
+            repartir_perdidas = round((perdidas / longitud_lista), 2)
+
+            for posicion in lista_perdidas:
+                lista_perdidas.append(repartir_perdidas)
+                repartir_perdidas *= 1.3
+
+        else:
+
+            beneficios
+
+
+        if resultado is False:
+            apuesta = 0.3
+
+
+
+        else:
+            apuesta = 0.3
+
+    resultado = choice(lista)
+
+    # --------------------------------------------------------------------
+
+    if resultado is False:
+        repeticion_false += 1
+        fallos_posicion_false[repeticion_false - 1] += 1
+
+    elif resultado is True:
+
+        if repeticion_false != 0:
+
+            posiciones_false[repeticion_false - 1] += 1
+            fallos_posicion_false[repeticion_false - 1] -= 1
+
+        repeticion_false = 0
+
+    if repeticion_max_false < repeticion_false:
+        repeticion_max_false = repeticion_false
+
+    # --------------------------------------------------------------------
+
+    saldos -= apuesta
+    saldos = saldos + (apuesta * multiplicador) if resultado is True else saldos + 0
+
+    beneficios = saldos - saldo_inicial
+    perdidas = saldo_inicial - saldos
+
+
+
+lista_invertida = []
+for valor in reversed(posiciones_false):
+    lista_invertida.append(valor)
+
+print(saldos)
+print(posiciones_false)
+# print(lista_invertida)
+print(fallos_posicion_false)
+

@@ -155,7 +155,10 @@ def generar_prueba_random(usar: int = 0, max_rondas: int = 0):
         apuesta_anterior = lista_apuestas[0]
 
         # Se introduce el resultado de la apuesta anterior para generar una nueva apuesta.
+
+        """ --- LLAMAR AL MÓDULO DE LA APUESTA --------------------------------------------- """
         apuesta = estrategia.calcular_apuesta(saldo_actual, resultado, apuesta_anterior)
+        """ -------------------------------------------------------------------------------- """
 
         lista_apuestas.append(apuesta)
         del lista_apuestas[0]

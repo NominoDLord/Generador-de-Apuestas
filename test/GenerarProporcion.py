@@ -33,12 +33,12 @@ def proporcion(trues: int, falses: int, resultado_ronda: bool) -> tuple[int, int
     # -------------------------------------------------------------------------------------------------------------
 
     if resultado_ronda is True:
-        proporcion.proporcion_true += falses
+        proporcion.proporcion_true += 1
 
     elif resultado_ronda is False:
-        proporcion.proporcion_false += trues
+        proporcion.proporcion_false += 2.78
 
-    return proporcion.proporcion_true, proporcion.proporcion_false
+    return proporcion.proporcion_true, int(proporcion.proporcion_false)
 
 
 # PRUEBAS --------------------------------------------------------------------------------------------------------------

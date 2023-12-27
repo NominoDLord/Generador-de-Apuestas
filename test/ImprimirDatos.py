@@ -19,7 +19,7 @@ import os
 
 subDir1 = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(subDir1)
-from config.configuracion import *
+from config.setup import *
 
 from typing import List, Tuple
 from GenerarProporcion import proporcion
