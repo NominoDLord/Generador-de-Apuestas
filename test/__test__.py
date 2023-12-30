@@ -1,146 +1,126 @@
-from random import choice
+import random
 
-lista = [True, False]
-
-limite_apuesta_minima = 0.3
-limite_apuesta_maxima = 100
-
-apuesta_minima = limite_apuesta_maxima
-apuesta_maxima = limite_apuesta_minima
-
-saldo_inicial = 1000
+saldo_inicial = 10000.00
 saldos = saldo_inicial
 
-saldo_max = saldo_inicial
-saldo_min = saldo_inicial
+ronda = 0
+rondas = 100000
+
+lista_opciones = [True, False]
 
 apuesta = None
-resultado = None
+apuesta_base  = 1.00
+lim_apuesta_max = 100
+lim_apuesta_min = 0.3
 
-beneficios = 0
-perdidas = 0
-
+apuesta_maxima = lim_apuesta_min
+apuesta_minima = lim_apuesta_max
 beneficio_max = 0
 perdida_max = 0
 
 multiplicador = 2
 
-contar_true = 0
-contar_false = 0
+contar_trues, contar_falses = 0, 0
+posicion_true, posicion_false = 0, 0
 
-repeticion_true = 0
-repeticion_false = 0
+opciones_true = 1
+opciones_false = 1
+opciones_total = opciones_true + opciones_false
 
-repeticion_max_false = 0
+probabilidad_de_acertar_trues = []
+probabilidad_de_acertar_falses = []
 
-posiciones_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-posiciones_true = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+probabilidad_true = round(opciones_true / opciones_total, 2)
+probabilidad_false = round(opciones_false / opciones_total, 2)
 
-fallos_posicion_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+probabilidad_porcentual_true = probabilidad_true * 100
+probabilidad_porcentual_false = probabilidad_false * 100
 
-lista_beneficios = []
-lista_perdidas = []
+while probabilidad_porcentual_true > 0.000001:
+    probabilidad_de_acertar_trues.append(round(probabilidad_porcentual_true, 4))
+    probabilidad_porcentual_true *= probabilidad_true
+
+while probabilidad_porcentual_false > 0.000001:
+    probabilidad_de_acertar_falses.append(round((100 - probabilidad_porcentual_false), 4))
+    probabilidad_porcentual_false *= probabilidad_false
+
+longitud_posiciones_true = len(probabilidad_de_acertar_trues)
+longitud_posiciones_false = len(probabilidad_de_acertar_falses)
+
+posiciones_true = [0] * longitud_posiciones_true
+posiciones_false = [0] * longitud_posiciones_false
 
 
-ronda = 0
-rondas = 100000
-
-while rondas != ronda:
+while ronda != rondas:
     ronda += 1
 
-    if resultado is None:
-        apuesta = limite_apuesta_minima
+    # GENERAR APUESTAS ----------------------------------------------------------------------------------------
+
+    if apuesta is None:
+        apuesta = apuesta_base
 
     else:
 
-        if perdidas > 0:
+        if resultado is True:
 
-            longitud_lista_perdidas = len(posiciones_false)
-            repartir_perdidas = round((perdidas / longitud_lista_perdidas), 2)
-
-            for _ in posiciones_false:
-                lista_perdidas.append(repartir_perdidas)
-                # repartir_perdidas *= 1.3
-
-        else:
-
-            longitud_lista_beneficios = len(posiciones_true)
-            repartir_beneficios = round((perdidas / longitud_lista_beneficios), 2)
-
-            for posicion in posiciones_true:
-                lista_beneficios.append(repartir_beneficios)
-                repartir_beneficios *= 0.5
+            apuesta = apuesta_base * ((probabilidad_de_acertar_trues[posicion_true] / 100) + 1)
 
         if resultado is False:
-            if perdidas > 0:
-                apuesta = lista_perdidas[repeticion_false]
-            else:
-                apuesta = limite_apuesta_minima
 
-        if resultado is True:
-            if perdidas > 0:
+            apuesta = apuesta_base * ((probabilidad_de_acertar_falses[posicion_false] / 100) + 1)
 
-                lista_perdidas_recortada = lista_perdidas[:10]
-                lista_perdidas_recortada.sort(reverse=True)
+        # INCREMENTO ·······················································································
 
-                if repeticion_true < 10:
-                    apuesta = lista_perdidas_recortada[repeticion_true]
-                else:
-                    apuesta = limite_apuesta_minima
+        diferencia = contar_falses - contar_trues
 
-            else:
-                apuesta = lista_beneficios[repeticion_true]
+        incremento = 1.00 + (diferencia / 100)
 
-    if apuesta < limite_apuesta_minima:
-        apuesta = limite_apuesta_minima
+        apuesta *= incremento
 
-    if ronda > 100:
+        if apuesta < lim_apuesta_min:
+            apuesta = lim_apuesta_min
 
-        proporcion_false = contar_false / ronda
+        if apuesta > lim_apuesta_max:
+            apuesta = lim_apuesta_max
 
-        if proporcion_false > 0.60:
-            apuesta *= 3
+        apuesta = round(apuesta, 2)
 
-        elif proporcion_false > 0.55:
-            apuesta *= 2
+    # OBTENER RESULTADO ALEATORIO -----------------------------------------------------------------------------
 
-    apuesta = round(apuesta, 2)
+    resultado = random.choice(lista_opciones)
 
-    resultado = choice(lista)
+    # CONTABILIZAR DATOS --------------------------------------------------------------------------------------
 
-    # --------------------------------------------------------------------
+    if resultado is True:
+        contar_trues += 1
+        posicion_true += 1
+
+        if posicion_false != 0:
+            posiciones_false[posicion_false - 1] += 1
+            posicion_false = 0
 
     if resultado is False:
-        contar_false += 1
-        repeticion_false += 1
-        fallos_posicion_false[repeticion_false - 1] += 1
+        contar_falses += 1
+        posicion_false += 1
 
-        if repeticion_true != 0:
-            repeticion_true = 0
+        if posicion_true != 0:
+            posiciones_true[posicion_true -1] += 1
+            posicion_true = 0
 
-    elif resultado is True:
-        contar_true += 1
-        repeticion_true += 1
 
-        if repeticion_false != 0:
-
-            posiciones_false[repeticion_false - 1] += 1
-            fallos_posicion_false[repeticion_false - 1] -= 1
-
-        repeticion_false = 0
-
-    if repeticion_max_false < repeticion_false:
-        repeticion_max_false = repeticion_false
-
-    # --------------------------------------------------------------------
+    # ACTUALIZAR SALDO ----------------------------------------------------------------------------------------
 
     saldos -= apuesta
     saldos = saldos + (apuesta * multiplicador) if resultado is True else saldos + 0
 
-    beneficios = saldos - saldo_inicial
-    perdidas = saldo_inicial - saldos
 
-    # --------------------------------------------------------------------
+    # CALCULAR PERDIDAS Y BENEFICIOS --------------------------------------------------------------------------
+
+    beneficios = round(saldos - saldo_inicial, 2)
+    perdidas = round(saldo_inicial - saldos, 2)
+
+
+    # ANALISIS DE DATOS ---------------------------------------------------------------------------------------
 
     if apuesta > apuesta_maxima:
         apuesta_maxima = apuesta
@@ -149,24 +129,22 @@ while rondas != ronda:
         apuesta_minima = apuesta
 
     if beneficio_max < beneficios:
-        beneficio_max = beneficios
+        beneficio_max = round(beneficios, 2)
 
     if perdida_max < perdidas:
-        perdida_max = perdidas
+        perdida_max = round(perdidas, 2)
 
-    if beneficio_max > 100:
+    if beneficios > 10000 or perdidas > 10000:
         break
 
-lista_invertida = []
-for valor in reversed(posiciones_false):
-    lista_invertida.append(valor)
 
-print(saldos)
-print(posiciones_false)
-# print(lista_invertida)
-# print(fallos_posicion_false)
+# === IMPRIMIR RESULTADOS =========================================================================================
 
+print(f"NÚMERO DE RONDAS: {ronda}")
+print(f"SALDO FINAL: {round(saldos, 2)}")
 print(f"APUESTA MÍNIMA: {apuesta_minima}")
 print(f"APUESTA MÁXIMA: {apuesta_maxima}")
+print(f"BENEFICIO FINAL: {beneficios}")
 print(f"BENEFICIO MÁXIMO: {beneficio_max}")
 print(f"PERDIDA MÁXIMA: {perdida_max}")
+print(f"PROPORCIÓN: {contar_trues} | {contar_falses}")

@@ -10,6 +10,7 @@ apuesta_maxima = limite_apuesta_minima
 
 saldo_inicial = 1000
 saldos = saldo_inicial
+saldo_objetivo = saldo_inicial + 10
 
 saldo_max = saldo_inicial
 saldo_min = saldo_inicial
@@ -34,60 +35,67 @@ repeticion_false = 0
 
 repeticion_max_false = 0
 
-posiciones_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-posiciones_true = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+posiciones_false = [0] * 20
+posiciones_true = [0] * 20
 
-fallos_posicion_false = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+posicion_perdidas = [0] * 20
+posicion_beneficios = [0] * 20
 
 lista_beneficios = []
 lista_perdidas = []
+
 lista_valores = []
+lista_apuestas = []
 
 ronda = 0
-rondas = 100000
+rondas = 1000
 
 while rondas != ronda:
     ronda += 1
 
+    # GENERAR APUESTA ----------------------------------------------------------------------------------------
+
     if resultado is None:
         apuesta = limite_apuesta_minima
 
+    # -------------------------------------------------------------------------
+
     else:
 
-        suma_fallos = sum(fallos_posicion_false)
+        # for valor in posicion_perdidas:
+        #     if valor > 0:
+        #         lista_valores.append(0)
+        #     else:
+        #         lista_valores.append(valor)
 
-        repartir_cantidades = suma_fallos / len(posiciones_false)
+        lista_valores = [round(valor1 + valor2, 2) for valor1, valor2 in zip(posicion_beneficios, posicion_perdidas)]
 
-        for _ in posiciones_false:
-            lista_valores.append(repartir_cantidades)
+        suma_valores = sum(lista_valores)
 
-        if perdidas > 0:
+        # for valor in lista_valores:
+        #     if valor < 0:
+        #         suma_valores += valor
 
-            longitud_lista_perdidas = len(posiciones_false)
-            repartir_perdidas = round((perdidas / longitud_lista_perdidas), 2)
+        suma_valores = round(suma_valores, 2)
 
-            if resultado is False:
+        print(f"SUMA VALORES: {suma_valores}")
 
-                apuesta = repartir_perdidas * repeticion_false
+        suma_valores = abs(suma_valores)
+        apuesta = suma_valores * (1 - (0.5 ** repeticion_false))
 
-            if resultado is True:
-                apuesta = repartir_perdidas / repeticion_true
 
-        if beneficios > 0:
 
-            if ronda > 100:
+        if apuesta < 0.3:
+            apuesta = 0.3
 
-                proporcion_false = contar_false / ronda
-                proporcion_true = contar_true / ronda
+        elif apuesta > 100:
+            apuesta = 100
 
-                if proporcion_false > 0.56:
-                    incremento = 2
+        else:
+            apuesta = round(apuesta, 2)
 
-                if proporcion_false > 0.53 and incremento == 2:
-                    incremento = 1
-
-            apuesta = 1 * incremento
-
+        # print(lista_valores)
+        print(f"APUESTA: {apuesta}")
 
     # --------------------------------------------------------------------
 
@@ -106,33 +114,37 @@ while rondas != ronda:
 
     apuesta = round(apuesta, 2)
 
-    resultado = choice(lista)
+    # GENERAR RESULTADO --------------------------------------------------------------------------------------
 
-    # --------------------------------------------------------------------
+    resultado = choice(lista)
+    print(f"RESULTADO: {resultado}")
+
+    # CONTABILIZAR DATOS -------------------------------------------------------------------------------------
 
     if resultado is False:
         contar_false += 1
+        posicion_perdidas[repeticion_false] -= round(apuesta, 2)
         repeticion_false += 1
-        fallos_posicion_false[repeticion_false - 1] += apuesta
 
         if repeticion_true != 0:
             repeticion_true = 0
 
     elif resultado is True:
         contar_true += 1
+        posicion_beneficios[repeticion_true] += (apuesta * multiplicador) - apuesta
         repeticion_true += 1
 
         if repeticion_false != 0:
+            # posicion_perdidas[repeticion_false - 1] += round((apuesta * multiplicador) - apuesta, 2)
+            posiciones_false[repeticion_false- 1] += 1
+            repeticion_false = 0
 
-            posiciones_false[repeticion_false - 1] += 1
-            fallos_posicion_false[repeticion_false - 1] -= (apuesta * multiplicador) - apuesta
+    index = 0
+    for valor in posicion_perdidas:
+        posicion_perdidas[index] = round(posicion_perdidas[index], 2)
+        index += 1
 
-        repeticion_false = 0
-
-    if repeticion_max_false < repeticion_false:
-        repeticion_max_false = repeticion_false
-
-    # --------------------------------------------------------------------
+    # CALCULAR SALDOS ---------------------------------------------------------------------------------------
 
     saldos -= apuesta
     saldos = saldos + (apuesta * multiplicador) if resultado is True else saldos + 0
@@ -140,7 +152,7 @@ while rondas != ronda:
     beneficios = saldos - saldo_inicial
     perdidas = saldo_inicial - saldos
 
-    # --------------------------------------------------------------------
+    # ANALIZAR DATOS ----------------------------------------------------------------------------------------
 
     if apuesta > apuesta_maxima:
         apuesta_maxima = apuesta
@@ -149,20 +161,23 @@ while rondas != ronda:
         apuesta_minima = apuesta
 
     if beneficio_max < beneficios:
-        beneficio_max = beneficios
+        beneficio_max = round(beneficios, 2)
 
     if perdida_max < perdidas:
-        perdida_max = perdidas
+        perdida_max = round(perdidas, 2)
 
-    if beneficio_max > 100:
+    if beneficios > 100:
         break
 
-lista_invertida = []
-for valor in reversed(posiciones_false):
-    lista_invertida.append(valor)
+# lista_invertida = []
+# for valor in reversed(posiciones_false):
+#     lista_invertida.append(valor)
 
-print(saldos)
-print(posiciones_false)
+
+print(f"RONDAS TOTALES: {ronda}")
+print(f"SALDO FINAL: {round(saldos, 2)}")
+print(f"POSICIONES: {posiciones_false}")
+
 # print(lista_invertida)
 # print(fallos_posicion_false)
 
