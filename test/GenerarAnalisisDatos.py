@@ -1,6 +1,6 @@
 import random
 
-print("GENERAR DATOS DE PRUEBAS")
+print("\nGENERAR DATOS DE PRUEBAS")
 print("==============================================================================")
 
 opciones_true, opciones_false = 3, 1
@@ -30,17 +30,17 @@ while probabilidad_porcentual_true > 0.000001:
     probabilidad_de_acertar_trues.append(round(probabilidad_porcentual_true, 4))
     probabilidad_porcentual_true *= probabilidad_true
 
-print(f"LISTA PROBABILIDAD ACERTAR (repeticiones True):\n{probabilidad_de_acertar_trues}")
-print(f"LONGITUD LISTA: {len(probabilidad_de_acertar_trues)}")
+print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones True):\n{probabilidad_de_acertar_trues}")
+print(f"\nLONGITUD LISTA: {len(probabilidad_de_acertar_trues)}")
 
-print("------------------------------------------------------------------------------")
+print("\n------------------------------------------------------------------------------")
 
 while probabilidad_porcentual_false > 0.000001:
     probabilidad_de_acertar_falses.append(round((100 - probabilidad_porcentual_false), 4))
     probabilidad_porcentual_false *= probabilidad_false
 
-print(f"LISTA PROBABILIDAD ACERTAR (repeticiones False):\n{probabilidad_de_acertar_falses}")
-print(f"LONGITUD LISTA: {len(probabilidad_de_acertar_falses)}")
+print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones False):\n{probabilidad_de_acertar_falses}")
+print(f"\nLONGITUD LISTA: {len(probabilidad_de_acertar_falses)}")
 
 longitud_posiciones_true = len(probabilidad_de_acertar_trues)
 longitud_posiciones_false = len(probabilidad_de_acertar_falses)
@@ -87,17 +87,17 @@ while ronda != rondas:
         if proporcion_min_false > proporcion_false:
             proporcion_min_false = proporcion_false
 
-
+print("\n=== RESULTADOS")
 print("==============================================================================")
 
-print(f"POSICIONES TRUE:\n{posiciones_true}")
-print(f"POSICIONES FALSE:\n{posiciones_false}")
-print("------------------------------------------------------------------------------")
+print(f"\nPOSICIONES TRUE:\n{posiciones_true}")
+print(f"\nPOSICIONES FALSE:\n{posiciones_false}")
+print("\n------------------------------------------------------------------------------\n")
 print(f"CANTIDAD TRUE: {contar_trues}")
 print(f"CANTIDAD FALSE: {contar_falses}")
-print("------------------------------------------------------------------------------")
+print("\n------------------------------------------------------------------------------\n")
 print(f"PROPORCIÓN MAX TRUE: {round(proporcion_max_true, 3)}")
 print(f"PROPORCIÓN MIN TRUE: {round(proporcion_min_true, 3)}")
-print("------------------------------------------------------------------------------")
+print("\n------------------------------------------------------------------------------\n")
 print(f"PROPORCIÓN MAX FALSE: {round(proporcion_max_false, 3)}")
 print(f"PROPORCIÓN MIN FALSE: {round(proporcion_min_false, 3)}")
