@@ -9,7 +9,7 @@ opciones_total = opciones_true + opciones_false
 
 lista_opciones = ([True] * opciones_true) + ([False] * opciones_false)
 
-ronda, rondas = 0, 1000000
+ronda, rondas = 0, 100000
 
 contar_trues, contar_falses = 0, 0
 posicion_true, posicion_false = 0, 0
