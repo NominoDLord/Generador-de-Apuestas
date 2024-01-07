@@ -46,24 +46,33 @@ while probabilidad_porcentual_false > 0.000001:
     probabilidad_de_acertar_falses.append(round((100 - probabilidad_porcentual_false), 4))
     probabilidad_porcentual_false *= probabilidad_false
 
+# [75.0, 93.75, 98.4375, 99.6094, 99.9023, 99.9756, 99.9939, 99.9985, 99.9996, 99.9999, 100.0, 100.0, 100.0]
+
 longitud_posiciones_true = len(probabilidad_de_acertar_trues)
 longitud_posiciones_false = len(probabilidad_de_acertar_falses)
 
 posiciones_true = [0] * longitud_posiciones_true
 posiciones_false = [0] * longitud_posiciones_false
 
-cantidad_probabilidad_superior_99 = 0
-cantidad_probabilidad_superior_25 = 0
+cnt_porcentaje_sup99_false = 0
+
+cnt_porcentaje_sup33_trues = 0
+cnt_porcentaje_sup25_trues = 0
 
 suma_perdidas_posiciones_99 = 0
 
 for propabilidad in probabilidad_de_acertar_trues:
     if propabilidad > 0.25:
-        cantidad_probabilidad_superior_25 += 1
+        cnt_porcentaje_sup25_trues += 1
+
+for propabilidad in probabilidad_de_acertar_trues:
+    if propabilidad > 0.33:
+        cnt_porcentaje_sup33_trues += 1
+
 
 for propabilidad in probabilidad_de_acertar_falses:
     if propabilidad > 99:
-        cantidad_probabilidad_superior_99 += 1
+        cnt_porcentaje_sup99_false += 1
 
 
 print("\nDATOS DEL JUEGO")
@@ -107,7 +116,36 @@ incremento_por_porcentaje_true = 0
 perdidas = 0
 beneficios = 0
 
-while saldos < 1500:
+suma_total_apuestas = 0
+
+# LECTURA DE RESULTADOS BOOLEANOS EN ARCHIVO TXT ····································································· #
+
+# Nombre del archivo de texto
+nombre_archivo = "Total_Bools[75-25].txt"
+
+# Lista para almacenar los valores
+lista_bools = []
+
+# Intentar abrir y leer el archivo
+try:
+    with open(nombre_archivo, 'r') as archivo:
+        # Leer cada línea del archivo
+        for linea in archivo:
+            # Convertir el valor a booleano y agregarlo a la lista
+            valor = linea.strip().lower() == 'true'
+            lista_bools.append(valor)
+
+except FileNotFoundError:
+    print(f"El archivo '{nombre_archivo}' no fue encontrado.")
+except Exception as e:
+    print(f"Ocurrió un error: {e}")
+
+index_lista_bools = 0
+longitud_lista_bools = len(lista_bools)
+
+# ==================================================================================================================== #
+
+while index_lista_bools != longitud_lista_bools:
 
 
 
@@ -134,6 +172,8 @@ while saldos < 1500:
 
                 if perdidas > 0:
 
+                    # if posicion_true < len(probabilidad_de_acertar_trues)  # TODO
+
                     incremento_posicion_true = (1+(probabilidad_de_acertar_trues[posicion_true] / 100))
                     apuesta += incremento_posicion_true * perdidas
 
@@ -146,7 +186,7 @@ while saldos < 1500:
 
                 if perdidas > 0:
                     if probabilidad_de_acertar_falses[posicion_false] > 99:
-                        apuesta += (perdidas / cantidad_probabilidad_superior_99)  # ((opciones_false / opciones_total) +1)
+                        apuesta += (perdidas / cnt_porcentaje_sup99_false)  # ((opciones_false / opciones_total) +1)
 
                     # if probabilidad_de_acertar_falses[posicion_false] > 99.9:
                     #     apuesta *= 3
@@ -168,14 +208,29 @@ while saldos < 1500:
                     apuesta *= incremento_por_porcentaje_true
 
         if apuesta > limite_apuesta_maxima:
+
             apuesta = limite_apuesta_maxima
 
         apuesta = round(apuesta, 2)
         print(apuesta)
 
-        # ··· GENERAR RESULTADO ··················································································
+        if posicion_false == 4:
+            apuesta = limite_apuesta_maxima
 
-        resultado = choice(lista_opciones)
+        if posicion_false == 3:
+            apuesta = limite_apuesta_maxima
+
+        if posicion_false == 2:
+            apuesta = limite_apuesta_maxima
+
+        # ··· GENERAR RESULTADO (Random) ·········································································
+
+        # resultado = choice(lista_opciones)
+
+        # ··· GENERAR RESULTADO (Texto) ··········································································
+
+        resultado = lista_bools[index_lista_bools]
+        index_lista_bools += 1
 
         # ··· CONTABILIZAR RESULTADOS ············································································
 
@@ -215,8 +270,11 @@ while saldos < 1500:
         beneficios = saldos - saldo_objetivo
         perdidas = saldo_objetivo - saldos
 
-        if beneficios > 10:
-            saldo_objetivo += beneficios
+        if beneficios > opciones_true:
+            saldo_objetivo += beneficios / opciones_true
+
+        # if perdidas > 80:
+        #     saldo_objetivo -= round(perdidas / 3, 2)
 
         # ··· ANALIZAR LÍMITES ··················································································
 
@@ -259,7 +317,7 @@ while saldos < 1500:
 
         # ··· REGISTRO DE DATOS ·················································································
 
-
+        suma_total_apuestas += round(apuesta, 2)
         lista_resultados.append(resultado)
         lista_apuestas.append(apuesta)
 
@@ -276,13 +334,17 @@ print("=========================================================================
 print("=== RESULTADOS ===")
 print("·······································································································")
 print(f"RONDAS TOTALES: {rondas_totales}")
+print(f"SALDO INICIAL: {round(saldo_inicial, 2)}")
 print(f"SALDO FINAL: {round(saldos, 2)}")
 print(f"SALDO MÁXIMO: {saldo_maximo}")
 print(f"SALDO MÍNIMO: {saldo_minimo}")
 print(f"APUESTA MÍNIMA: {apuesta_minima}")
 print(f"APUESTA MÁXIMA: {apuesta_maxima}")
-# print(f"BENEFICIO MÁXIMO: {beneficio_max}")
-# print(f"PERDIDA MÁXIMA: {perdida_max}")
-# print(f"REPETICIONES: {iniciar}")
+print(f"TOTAL APOSTADO: {round(suma_total_apuestas, 2)}")
+print(f"DEVOLUCIÓN [5%]: {round(suma_total_apuestas * 0.05, 2)}")
+print(f"DEVOLUCIÓN [3%]: {round(suma_total_apuestas * 0.03, 2)}")
+print(f"TRUE | FALSE (% MAX): {round(proporcion_max_true, 3)} | {round(proporcion_max_false, 3)}")
+print(f"FALSE | TRUE (% MIN): {round(proporcion_min_false, 3)} | {round(proporcion_min_true, 3)}")
 
-# print(f"POSICIONES: {posiciones_false}")
+# print(f"REPETICIONES: {iniciar}")
+print(f"POSICIONES: {posiciones_false}")

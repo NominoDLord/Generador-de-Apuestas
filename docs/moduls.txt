@@ -1,0 +1,16 @@
+LISTADO DE LOS MÓDULOS PERSONALIZADOS
+
+·····   generadorDeRonda ·······························································
+DESC:	Cada vez que se llama a la función, devuelve +1 al valor anterior entregado.
+FUNC:	generar_ronda()
+ARGS:	---
+RETR:	ronda (int)
+
+
+generadorDeProbabilidad
+
+NAME:	generadorDeProbabilidad
+DESC:
+FUNC:	lista_probabilidad
+ARGS:
+RETR:

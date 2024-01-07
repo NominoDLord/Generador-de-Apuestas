@@ -22,17 +22,39 @@
 # print(posiciones_perdidas)
 
 
-num1 = 0
-while num1 < 10:
+# num1 = 0
+# while num1 < 10:
+#
+#     num1 += 1
+#     num2 = 0
+#
+#     print("1r bucle")
+#
+#     while True:
+#
+#         num2 += 1
+#         print("2n bucle")
+#         if num2 < 5:
+#             break
 
-    num1 += 1
-    num2 = 0
+# Nombre del archivo de texto
+nombre_archivo = "Total_Bools[75-25].txt"
 
-    print("1r bucle")
+# Lista para almacenar los valores
+lista_bools = []
 
-    while True:
+# Intentar abrir y leer el archivo
+try:
+    with open(nombre_archivo, 'r') as archivo:
+        # Leer cada línea del archivo
+        for linea in archivo:
+            # Convertir el valor a booleano y agregarlo a la lista
+            valor = linea.strip().lower() == 'true'
+            lista_bools.append(valor)
 
-        num2 += 1
-        print("2n bucle")
-        if num2 < 5:
-            break
+except FileNotFoundError:
+    print(f"El archivo '{nombre_archivo}' no fue encontrado.")
+except Exception as e:
+    print(f"Ocurrió un error: {e}")
+
+print(lista_bools)
