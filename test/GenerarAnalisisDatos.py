@@ -3,13 +3,16 @@ import random
 print("\nGENERAR DATOS DE PRUEBAS")
 print("==============================================================================")
 
-opciones_true, opciones_false = 3, 1
+apuesta_minima = 0.3
+apuesta_maxima = 100
+
+opciones_true, opciones_false = 4, 1
 
 opciones_total = opciones_true + opciones_false
 
 lista_opciones = ([True] * opciones_true) + ([False] * opciones_false)
 
-ronda, rondas = 0, 100000
+ronda, rondas = 0, 1000000
 
 contar_trues, contar_falses = 0, 0
 posicion_true, posicion_false = 0, 0
@@ -48,6 +51,8 @@ longitud_posiciones_false = len(probabilidad_de_acertar_falses)
 posiciones_true = [0] * longitud_posiciones_true
 posiciones_false = [0] * longitud_posiciones_false
 
+repeticiones_de_posicion = [0] * longitud_posiciones_false
+lista_de_repeticiones = []
 
 while ronda != rondas:
     ronda += 1
@@ -60,6 +65,10 @@ while ronda != rondas:
 
         if posicion_false != 0:
             posiciones_false[posicion_false - 1] += 1
+
+            ultima_posicion = posicion_false - 1
+            lista_de_repeticiones.append(ultima_posicion)
+
             posicion_false = 0
 
     if resultado is False:
@@ -87,6 +96,38 @@ while ronda != rondas:
         if proporcion_min_false > proporcion_false:
             proporcion_min_false = proporcion_false
 
+
+i = 0
+while i != longitud_posiciones_false:
+    repeticiones = 0
+    max_rep = 0
+
+    for numero in lista_de_repeticiones:
+
+        if numero == i:
+            repeticiones += 1
+
+        else:
+
+            if repeticiones > max_rep:
+                max_rep = repeticiones
+
+            repeticiones = 0
+
+    repeticiones_de_posicion[i] = max_rep
+    i += 1
+
+
+max_error = 0
+apuestas = apuesta_minima
+listado_de_apuesta = []
+
+while apuestas < apuesta_maxima:
+    max_error += 1
+    listado_de_apuesta.append(apuestas)
+    apuestas *= opciones_true
+
+
 print("\n=== RESULTADOS")
 print("==============================================================================")
 
@@ -101,3 +142,9 @@ print(f"PROPORCIÓN MIN TRUE: {round(proporcion_min_true, 3)}")
 print("\n------------------------------------------------------------------------------\n")
 print(f"PROPORCIÓN MAX FALSE: {round(proporcion_max_false, 3)}")
 print(f"PROPORCIÓN MIN FALSE: {round(proporcion_min_false, 3)}")
+print("\n------------------------------------------------------------------------------\n")
+print(f"ERRORES MÁXIMOS: {max_error}")
+print(f"LISTA DE APUESTAS: {listado_de_apuesta}")
+print(f"REPETICIONES DE POSICIÓN: {repeticiones_de_posicion}")
+
+#
