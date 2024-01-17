@@ -8,11 +8,14 @@ apuesta_maxima = 100
 
 opciones_true, opciones_false = 4, 1
 
+print(f"OPCIONES ACIERTO: {opciones_true}")
+print(f"OPCIONES FALLO: {opciones_false}")
+
+print("\n------------------------------------------------------------------------------")
+
 opciones_total = opciones_true + opciones_false
 
 lista_opciones = ([True] * opciones_true) + ([False] * opciones_false)
-
-ronda, rondas = 0, 10000
 
 contar_trues, contar_falses = 0, 0
 posicion_true, posicion_false = 0, 0
@@ -20,54 +23,58 @@ posicion_true, posicion_false = 0, 0
 proporcion_max_true, proporcion_max_false = opciones_true / opciones_total, opciones_false / opciones_total
 proporcion_min_true, proporcion_min_false = opciones_true / opciones_total, opciones_false / opciones_total
 
-probabilidad_de_acertar_trues = []
-probabilidad_de_acertar_falses = []
-probabilidad_de_fallar_falses = []
+lista_probabilidad_de_acertar_trues = []
+lista_probabilidad_de_acertar_falses = []
+lista_probabilidad_de_fallar_falses = []
 
-probabilidad_true = round(opciones_true / opciones_total, 2)
-probabilidad_false = round(opciones_false / opciones_total, 2)
+probabilidad_base_true = round(opciones_true / opciones_total, 2)
+probabilidad_base_false = round(opciones_false / opciones_total, 2)
 
-probabilidad_porcentual_true = probabilidad_true * 100
+porcentaje_base_true = probabilidad_base_true * 100
+porcentaje_base_false = probabilidad_base_false * 100
 
-while probabilidad_porcentual_true > 0.000001:
-    probabilidad_de_acertar_trues.append(round(probabilidad_porcentual_true, 4))
-    probabilidad_porcentual_true *= probabilidad_true
+porcentajes_true = porcentaje_base_true
+while porcentajes_true > 0.000001:
+    lista_probabilidad_de_acertar_trues.append(round(porcentajes_true, 4))
+    porcentajes_true *= probabilidad_base_true
 
-print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones True):\n{probabilidad_de_acertar_trues}")
-print(f"\nLONGITUD LISTA: {len(probabilidad_de_acertar_trues)}")
-
-print("\n------------------------------------------------------------------------------")
-
-probabilidad_porcentual_false = probabilidad_false * 100
-
-while probabilidad_porcentual_false > 0.000001:
-    probabilidad_de_acertar_falses.append(round((100 - probabilidad_porcentual_false), 4))
-    probabilidad_porcentual_false *= probabilidad_false
-
-print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones False):\n{probabilidad_de_acertar_falses}")
-print(f"\nLONGITUD LISTA: {len(probabilidad_de_acertar_falses)}")
+print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones True):\n{lista_probabilidad_de_acertar_trues}")
+print(f"\nLONGITUD LISTA: {len(lista_probabilidad_de_acertar_trues)}")
 
 print("\n------------------------------------------------------------------------------")
 
-probabilidad_porcentual_false = probabilidad_false * 100
+porcentajes_false = porcentaje_base_false
 
-while probabilidad_porcentual_false > 0.000001:
-    probabilidad_de_fallar_falses.append(round(probabilidad_porcentual_false, 4))
-    probabilidad_porcentual_false *= probabilidad_false
+while porcentajes_false > 0.000001:
+    lista_probabilidad_de_acertar_falses.append(round((100 - porcentajes_false), 4))
+    porcentajes_false *= probabilidad_base_false
 
-print(f"\nLISTA PROBABILIDAD FALLAR (repeticiones False):\n{probabilidad_de_fallar_falses}")
-print(f"\nLONGITUD LISTA: {len(probabilidad_de_fallar_falses)}")
+print(f"\nLISTA PROBABILIDAD ACERTAR (repeticiones False):\n{lista_probabilidad_de_acertar_falses}")
+print(f"\nLONGITUD LISTA: {len(lista_probabilidad_de_acertar_falses)}")
 
 print("\n------------------------------------------------------------------------------")
 
-longitud_posiciones_true = len(probabilidad_de_acertar_trues)
-longitud_posiciones_false = len(probabilidad_de_acertar_falses)
+porcentajes_false = porcentaje_base_false
+
+while porcentajes_false > 0.000001:
+    lista_probabilidad_de_fallar_falses.append(round(porcentajes_false, 4))
+    porcentajes_false *= probabilidad_base_false
+
+print(f"\nLISTA PROBABILIDAD FALLAR (repeticiones False):\n{lista_probabilidad_de_fallar_falses}")
+print(f"\nLONGITUD LISTA: {len(lista_probabilidad_de_fallar_falses)}")
+
+print("\n------------------------------------------------------------------------------")
+
+longitud_posiciones_true = len(lista_probabilidad_de_acertar_trues)
+longitud_posiciones_false = len(lista_probabilidad_de_acertar_falses)
 
 posiciones_true = [0] * longitud_posiciones_true
 posiciones_false = [0] * longitud_posiciones_false
 
 repeticiones_de_posicion = [0] * longitud_posiciones_false
 lista_de_repeticiones = []
+
+ronda, rondas = 0, 10000
 
 while ronda != rondas:
     ronda += 1
@@ -205,10 +212,90 @@ for posicion in lista_sumatoria_false:
     lista_promedios_false[i] += posicion / repeticiones
 
 
-print("\n------------------------------------------------------------------------------")
+print("\n==============================================================================")
 
 print(f"\nLISTA PROMEDIO: {lista_promedios_false}")
 print(f"\nREPETICIONES: {repeticiones}")
+
+
+ronda, rondas = 0, 100000
+lista_resultados_generados = []
+
+while ronda != rondas:
+    ronda += 1
+
+    resultado = random.choice(lista_opciones)
+    lista_resultados_generados.append(resultado)
+
+long_list_resultados_generados = len(lista_resultados_generados) -1
+
+probabilidad_limite_true, probabilidades = 10, 0
+while lista_probabilidad_de_acertar_trues[probabilidades] > probabilidad_limite_true:
+    probabilidades += 1
+
+
+secuencia = 1
+secuencia_max = probabilidades
+
+while secuencia != secuencia_max:
+
+    secuencia += 1
+
+    intentos = 0
+    intentos_maximos = 0
+    distancia_maxima = 0
+
+    repeticion_true = 0
+
+    buscar_consecutivos = secuencia
+    lista_posiciones_de_secuencia = []
+
+    i = -1
+    while long_list_resultados_generados != i:
+        i += 1
+
+        resultado_generado = lista_resultados_generados[i]
+
+        if resultado_generado is True:
+            repeticion_true += 1
+
+            if repeticion_true == 1:
+                intentos += 1
+
+        else:
+
+            if repeticion_true >= buscar_consecutivos:
+
+                if intentos_maximos < intentos:
+                    intentos_maximos = intentos
+
+                intentos = 0
+
+                lista_posiciones_de_secuencia.append(i)
+
+                if len(lista_posiciones_de_secuencia) == 2:
+                    distancia_entre_posiciones = lista_posiciones_de_secuencia[1] - lista_posiciones_de_secuencia[0]
+
+                    if distancia_maxima < distancia_entre_posiciones:
+                        distancia_maxima = distancia_entre_posiciones
+
+                    del lista_posiciones_de_secuencia[0]
+
+            repeticion_true = 0
+
+    # ························································································ #
+
+    if secuencia == 2:
+        print("\n==============================================================================\n")
+        print("DATOS DE SECUENCIAS [True]")
+        print("······························")
+
+    print(f"SECUENCIA: {secuencia}")
+    print(f"INTENTOS: {intentos_maximos}")
+    print(f"DISTANCIA: {distancia_maxima}")
+    print("······························")
+
+
 
 
 #
